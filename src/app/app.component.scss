@@ -1,0 +1,14 @@
+.catalog {
+  padding: 3rem 0;
+  // .catalog__container
+  &__container {
+  }
+  // .catalog__title
+  &__title {
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+  }
+}
+.title {
+}
