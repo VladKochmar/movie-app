@@ -1,22 +1,5 @@
 <main class="main">
-  <div class="catalog">
-    <div class="catalog__container">
-      <h2 class="catalog__title title">All Movies</h2>
-      <app-movies-list [movies]="movies" (addFavorite)="toggleFavorites($event)" (addWatchLater)="toggleWatchLater($event)"></app-movies-list>
-    </div>
-  </div>
-  <div *ngIf="favorites.length" class="catalog">
-    <div class="catalog__container">
-      <h2 class="catalog__title title">Favorites</h2>
-      <app-movies-list [movies]="favorites" (addFavorite)="toggleFavorites($event)" (addWatchLater)="toggleWatchLater($event)"></app-movies-list>
-    </div>
-  </div>
-  <div *ngIf="watchLater.length" class="catalog">
-    <div class="catalog__container">
-      <h2 class="catalog__title title">Watch Later</h2>
-      <app-movies-list [movies]="watchLater" (addFavorite)="toggleFavorites($event)" (addWatchLater)="toggleWatchLater($event)"></app-movies-list>
-    </div>
-  </div>
+  <app-movies-list [movies]="movies"></app-movies-list>
 </main>
 
 <router-outlet />

@@ -3,3 +3,18 @@
   grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 1.5rem 1rem;
 }
+.catalog {
+  padding: 3rem 0;
+  // .catalog__title
+  &__title {
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+  }
+  // .catalog__list
+  &__list {
+    &:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+  }
+}

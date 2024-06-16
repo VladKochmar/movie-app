@@ -21,6 +21,8 @@ export class AppComponent {
         'Bohemian Rhapsody is a 2018 biographical musical drama film that focuses on the life of Freddie Mercury, the lead singer of the British rock band Queen, from the formation of the band in 1970 to their 1985 Live Aid performance at the original Wembley Stadium.',
       poster:
         'https://m.media-amazon.com/images/I/61dk4SHy1CL._UF894,1000_QL80_.jpg',
+      isFavorite: false,
+      isWatchLater: false,
     },
     {
       id: 2,
@@ -31,6 +33,8 @@ export class AppComponent {
         'Beetlejuice is a 1988 American fantasy horror comedy film directed by Tim Burton from a screenplay by Michael McDowell and Warren Skaaren based on a story by McDowell and Larry Wilson.',
       poster:
         'https://m.media-amazon.com/images/S/pv-target-images/73f72124123a65f86205b1893fa0d699e3658adb2ca71659d2b08ae0b64c61c8.jpg',
+      isFavorite: false,
+      isWatchLater: false,
     },
     {
       id: 3,
@@ -41,6 +45,8 @@ export class AppComponent {
         "The history of the United States from the 1950s to the '70s unfolds from the perspective of an Alabama man with an IQ of 75, who yearns to be reunited with his childhood sweetheart.",
       poster:
         'https://m.media-amazon.com/images/S/pv-target-images/2d0c9e38968936e6711c7fb2bc7895b82d8bb9178b5a854e14dffa4b17b88487.jpg',
+      isFavorite: false,
+      isWatchLater: false,
     },
     {
       id: 4,
@@ -51,21 +57,8 @@ export class AppComponent {
         'Teddy Daniels and Chuck Aule, two US marshals, are sent to an asylum on a remote island in order to investigate the disappearance of a patient, where Teddy uncovers a shocking truth about the place.',
       poster:
         'https://m.media-amazon.com/images/I/71UewhmxlvL._AC_UF894,1000_QL80_.jpg',
+      isFavorite: false,
+      isWatchLater: false,
     },
   ];
-
-  favorites: any[] = [];
-  watchLater: any[] = [];
-
-  toggleFavorites(movie: any) {
-    if (this.favorites.includes(movie))
-      this.favorites = this.favorites.filter((item) => item.id !== movie.id);
-    else this.favorites.push(movie);
-  }
-
-  toggleWatchLater(movie: any) {
-    if (this.watchLater.includes(movie))
-      this.watchLater = this.watchLater.filter((item) => item.id !== movie.id);
-    else this.watchLater.push(movie);
-  }
 }
