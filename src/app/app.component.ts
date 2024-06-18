@@ -60,5 +60,15 @@ export class AppComponent {
       isFavorite: false,
       isWatchLater: false,
     },
+    {
+      id: 5,
+      title: 'Pirates of the Caribbean',
+      time: '143',
+      director: 'Gore Verbinski',
+      description:
+        "Pirates of the Caribbean is an American fantasy supernatural swashbuckler film series produced by Jerry Bruckheimer and based on Walt Disney's theme park attraction of the same name.",
+      isFavorite: false,
+      isWatchLater: false,
+    },
   ];
 }
