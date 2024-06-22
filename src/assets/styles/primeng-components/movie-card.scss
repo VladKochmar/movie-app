@@ -1,0 +1,28 @@
+.movie {
+  &.p-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 360px;
+    @media (any-hover: hover) {
+      &:hover {
+        .movie__content {
+          transform: translateY(0%);
+          padding-top: 72px;
+        }
+      }
+    }
+  }
+
+  .p-card-header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    padding: 1.25rem 1.25rem 0;
+  }
+
+  .p-button {
+    color: #f5f5f5;
+    border-color: rgba(245, 245, 245, 0.7);
+  }
+}

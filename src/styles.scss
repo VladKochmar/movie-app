@@ -1,3 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
-@import "./assets/styles/reset";
+@layer reset {
+  @import "./assets/styles/reset";
+}
+
 @import "./assets/styles/common";
+
+// Primeng Components ========================================================================================================================================================
+@import "./assets/styles/primeng-components/movie-card";
+@import "./assets/styles/primeng-components/sidebar-menu";

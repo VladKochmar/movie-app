@@ -1,0 +1,11 @@
+<app-header [favoritesIds]="favoritesIds" [watchLaterIds]="watchLaterIds"></app-header>
+<div class="page">
+  <div class="page__container">
+    <h1 class="page__title title">Upcoming Movies</h1>
+    <div class="movies-list">
+      @for (movie of movies; track movie.id) {
+      <app-movie-card [movie]="movie" (addFavorite)="toggleFavorites($event)" (addWatchLater)="toggleWatchLater($event)"></app-movie-card>
+      }
+    </div>
+  </div>
+</div>

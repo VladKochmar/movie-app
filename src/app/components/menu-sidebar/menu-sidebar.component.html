@@ -1,0 +1,25 @@
+<div class="sidebar">
+  <p-sidebar #sidebarRef [(visible)]="sidebarVisible">
+    <ng-template pTemplate="header">
+      <div class="sidebar-header">
+        <a [routerLink]="['/']" class="logo-box">
+          <img src="../../../assets/images/logo.png" alt="Logo" class="logo-box__image" />
+          <span class="logo-box__title">World of Movies</span>
+        </a>
+      </div>
+    </ng-template>
+    <p-menu [model]="items" styleClass="sidebar-menu">
+      <ng-template pTemplate="item" let-item>
+        <a [routerLink]="item.route" class="p-menuitem-link">
+          <span [class]="item.icon"></span>
+          <span class="ml-2">{{ item.label }}</span>
+        </a>
+      </ng-template>
+    </p-menu>
+  </p-sidebar>
+</div>
+<div class="sidebar-btn-box">
+  <div class="sidebar-btn-box__container">
+    <p-button (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
+  </div>
+</div>
