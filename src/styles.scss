@@ -1,7 +1,9 @@
 @layer reset {
   @import "./assets/styles/reset";
 }
-@import "primeng/resources/primeng.css" layer(primeng);
-@import "primeng/resources/themes/saga-blue/theme.css";
-@import "primeicons/primeicons.css";
+
 @import "./assets/styles/common";
+
+// Primeng Components ========================================================================================================================================================
+@import "./assets/styles/primeng-components/movie-card";
+@import "./assets/styles/primeng-components/sidebar-menu";

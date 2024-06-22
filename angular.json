@@ -24,7 +24,12 @@
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles.scss",
+              "primeng/resources/primeng.css",
+              "primeng/resources/themes/bootstrap4-light-blue/theme.css",
+              "primeicons/primeicons.css"
+            ],
             "scripts": []
           },
           "configurations": {

@@ -1,36 +1,7 @@
-<div class="catalog">
-  <div class="catalog__container">
-    <h2 class="catalog__title title">All Movies</h2>
-    <div class="catalog__list movies-list">
-      @for (movie of movies; track movie.id) {
-      <div>
-        <app-movie-card [movie]="movie" (addFavorite)="toggleFavorites($event)" (addWatchLater)="toggleWatchLater($event)"></app-movie-card>
-      </div>
-      }
-    </div>
-    <h2 class="catalog__title title">Favorites</h2>
-    @if (favorites.length) {
-    <div class="catalog__list movies-list">
-      @for (movie of favorites; track movie.id) {
-      <div>
-        <app-movie-card [movie]="movie" (addFavorite)="toggleFavorites($event)" (addWatchLater)="toggleWatchLater($event)"></app-movie-card>
-      </div>
-      }
-    </div>
-    } @else {
-    <h2 class="empty-title">There are currently no movies in the Favorites list</h2>
-    }
-    <h2 class="catalog__title title">Watch Later</h2>
-    @if (watchLater.length) {
-    <div class="catalog__list movies-list">
-      @for (movie of watchLater; track movie.id) {
-      <div>
-        <app-movie-card [movie]="movie" (addFavorite)="toggleFavorites($event)" (addWatchLater)="toggleWatchLater($event)"></app-movie-card>
-      </div>
-      }
-    </div>
-    } @else {
-    <h2 class="empty-title">There are currently no movies in the Watch Later list</h2>
-    }
+<div class="movies-list">
+  @for (movie of movies; track movie.id) {
+  <div>
+    <app-movie-card [movie]="movie" (addFavorite)="toggleFavorites($event)" (addWatchLater)="toggleWatchLater($event)"></app-movie-card>
   </div>
+  }
 </div>
