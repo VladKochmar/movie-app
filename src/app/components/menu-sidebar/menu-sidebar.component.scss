@@ -1,0 +1,19 @@
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 0 1rem;
+  // .logo-box__image
+  &__image {
+    max-width: 5rem;
+  }
+  // .logo-box__title
+  &__title {
+    font-weight: 700;
+  }
+}
