@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { DefaultImagePipe } from '../../pipes/default-image/default-image.pipe';
 import { TruncatePipe } from '../../pipes/truncate/truncate.pipe';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
 import { PrimeIcons } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
+import { MovieService } from '../../services/movie/movie.service';
 
 @Component({
   selector: 'app-movie-card',
@@ -23,19 +24,31 @@ import { RouterLink } from '@angular/router';
   templateUrl: './movie-card.component.html',
   styleUrl: './movie-card.component.scss',
 })
-export class MovieCardComponent {
+export class MovieCardComponent implements OnInit {
   @Input() movie: any;
-  @Output() addFavorite = new EventEmitter<any>();
-  @Output() addWatchLater = new EventEmitter<any>();
 
-  addToFavorites() {
-    // Збираюся замінити реалізацію з movie.isFavorite та movie.isWatchLater після вивчення Store, щоб зберігати id фільмів і через них перевіряти, чи був фільм доданий до favorites або watchLater
-    this.movie.isFavorite = !this.movie.isFavorite;
-    this.addFavorite.emit(this.movie);
+  isFavorite: boolean = false;
+  isWatchLater: boolean = false;
+
+  constructor(private movieService: MovieService) {}
+
+  ngOnInit(): void {
+    this.isFavorite = this.movieService.getFavorites().includes(this.movie);
+    this.isWatchLater = this.movieService.getWatchLater().includes(this.movie);
   }
 
-  addToWatchLater() {
-    this.movie.isWatchLater = !this.movie.isWatchLater;
-    this.addWatchLater.emit(this.movie);
+  toggleFavorites() {
+    if (this.isFavorite) this.movieService.removeMovieFromFavorites(this.movie);
+    else this.movieService.setMovieToFavorites(this.movie);
+
+    this.isFavorite = !this.isFavorite;
+  }
+
+  toggleWatchLater() {
+    if (this.isWatchLater)
+      this.movieService.removeMovieFromWatchLater(this.movie);
+    else this.movieService.setMovieToWatchLater(this.movie);
+
+    this.isWatchLater = !this.isWatchLater;
   }
 }

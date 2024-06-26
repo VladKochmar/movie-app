@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TopRateListPageComponent } from './top-rate-list-page.component';
+import { TopRatedListPageComponent } from './top-rated-list-page.component';
 
 describe('TopRateListPageComponent', () => {
-  let component: TopRateListPageComponent;
-  let fixture: ComponentFixture<TopRateListPageComponent>;
+  let component: TopRatedListPageComponent;
+  let fixture: ComponentFixture<TopRatedListPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TopRateListPageComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(TopRateListPageComponent);
+      imports: [TopRatedListPageComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TopRatedListPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

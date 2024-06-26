@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
-import { Sidebar } from 'primeng/sidebar';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 
@@ -14,7 +13,7 @@ import { MenuItem } from 'primeng/api';
   styleUrl: './menu-sidebar.component.scss',
 })
 export class MenuSidebarComponent implements OnInit {
-  @ViewChild('sidebarRef') sidebarRef!: Sidebar;
+  sidebarVisible: boolean = false;
 
   items: MenuItem[] | undefined;
 
@@ -26,9 +25,9 @@ export class MenuSidebarComponent implements OnInit {
         label: 'Navigation',
         items: [
           {
-            label: 'Top Rate',
+            label: 'Top Rated',
             icon: 'pi pi-star',
-            route: '/top-rate',
+            route: '/top-rated',
           },
           {
             label: 'Popular',
@@ -49,10 +48,4 @@ export class MenuSidebarComponent implements OnInit {
       },
     ];
   }
-
-  closeCallback(e: any): void {
-    this.sidebarRef.close(e);
-  }
-
-  sidebarVisible: boolean = false;
 }

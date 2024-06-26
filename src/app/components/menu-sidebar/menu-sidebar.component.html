@@ -1,5 +1,5 @@
 <div class="sidebar">
-  <p-sidebar #sidebarRef [(visible)]="sidebarVisible">
+  <p-sidebar [(visible)]="sidebarVisible">
     <ng-template pTemplate="header">
       <div class="sidebar-header">
         <a [routerLink]="['/']" class="logo-box">
@@ -18,8 +18,4 @@
     </p-menu>
   </p-sidebar>
 </div>
-<div class="sidebar-btn-box">
-  <div class="sidebar-btn-box__container">
-    <p-button (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>
-  </div>
-</div>
+<p-button (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>

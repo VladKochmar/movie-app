@@ -1,25 +1,15 @@
-import { Component, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { MenuSidebarComponent } from '../menu-sidebar/menu-sidebar.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, RouterLinkActive, ButtonModule, MenuSidebarComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  @Input() favoritesIds: string[] = [];
-  @Input() watchLaterIds: string[] = [];
-
-  constructor(private router: Router) {}
-
-  navigateWithData(data: string[], isFavorite?: string) {
-    const dataString = JSON.stringify(data);
-    const path = isFavorite ? 'favorites' : 'watch-later';
-
-    this.router.navigate([{ outlets: { header: [path] } }], {
-      queryParams: { data: dataString },
-    });
-  }
+  constructor() {}
 }
