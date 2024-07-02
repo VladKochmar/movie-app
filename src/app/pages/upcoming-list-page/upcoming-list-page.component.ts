@@ -1,33 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { upcomingMovies } from '../../../assets/data/mock-data';
-import { HeaderComponent } from '../../components/header/header.component';
-import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
+import { MoviesListComponent } from '../../components/movies-list/movies-list.component';
+import { MovieService } from '../../services/movie/movie.service';
 
 @Component({
   selector: 'app-upcoming-list-page',
   standalone: true,
-  imports: [MovieCardComponent, HeaderComponent],
+  imports: [MoviesListComponent],
   templateUrl: './upcoming-list-page.component.html',
   styleUrl: './upcoming-list-page.component.scss',
 })
 export class UpcomingListPageComponent implements OnInit {
-  movies: any = [];
-  favoritesIds: string[] = [];
-  watchLaterIds: string[] = [];
+  movies: any[] = [];
+
+  constructor(private movieService: MovieService) {}
 
   ngOnInit(): void {
-    this.movies = [...upcomingMovies];
-  }
-
-  toggleFavorites(movie: any) {
-    if (this.favoritesIds.includes(movie.id))
-      this.favoritesIds = this.favoritesIds.filter((id) => id !== movie.id);
-    else this.favoritesIds.push(movie.id);
-  }
-
-  toggleWatchLater(movie: any) {
-    if (this.watchLaterIds.includes(movie.id))
-      this.watchLaterIds = this.watchLaterIds.filter((id) => id !== movie.id);
-    else this.watchLaterIds.push(movie.id);
+    this.movies = this.movieService.getUpcomingMovies();
   }
 }

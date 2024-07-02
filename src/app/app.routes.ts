@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { PopularListPageComponent } from './pages/popular-list-page/popular-list-page.component';
-import { TopRateListPageComponent } from './pages/top-rate-list-page/top-rate-list-page.component';
+import { TopRatedListPageComponent } from './pages/top-rated-list-page/top-rated-list-page.component';
 import { UpcomingListPageComponent } from './pages/upcoming-list-page/upcoming-list-page.component';
 import { NowPlayingListPageComponent } from './pages/now-playing-list-page/now-playing-list-page.component';
 import { FavoritesComponent } from './pages/favorites/favorites.component';
@@ -9,18 +9,10 @@ import { MovieDetailsComponent } from './pages/movie-details/movie-details.compo
 
 export const routes: Routes = [
   { path: '', component: PopularListPageComponent },
-  { path: 'top-rate', component: TopRateListPageComponent },
+  { path: 'top-rated', component: TopRatedListPageComponent },
   { path: 'upcoming', component: UpcomingListPageComponent },
   { path: 'now-playing', component: NowPlayingListPageComponent },
   { path: 'movie/:id', component: MovieDetailsComponent },
-  {
-    path: 'favorites',
-    component: FavoritesComponent,
-    outlet: 'header',
-  },
-  {
-    path: 'watch-later',
-    component: WatchLaterComponent,
-    outlet: 'header',
-  },
+  { path: 'favorites', component: FavoritesComponent },
+  { path: 'watch-later', component: WatchLaterComponent },
 ];

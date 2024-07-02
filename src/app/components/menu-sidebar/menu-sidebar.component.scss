@@ -2,10 +2,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // .sidebar-header__close-btn
-  &__close-btn {
-    padding: 0.5rem;
-  }
 }
 
 .logo-box {
@@ -20,9 +16,4 @@
   &__title {
     font-weight: 700;
   }
-}
-
-.sidebar-btn-box {
-  padding: 0.75rem 0;
-  background-color: #252525;
 }

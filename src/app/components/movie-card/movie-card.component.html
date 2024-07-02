@@ -1,14 +1,14 @@
 <p-card styleClass="movie">
   <ng-template pTemplate="header">
-    @if (movie.isWatchLater) {
-    <p-button icon="pi pi-bookmark-fill" [rounded]="true" [outlined]="true" (click)="addToWatchLater()"></p-button>
+    @if (isWatchLater) {
+    <p-button icon="pi pi-bookmark-fill" [rounded]="true" [outlined]="true" (click)="toggleWatchLater()"></p-button>
     } @else {
-    <p-button icon="pi pi-bookmark" [rounded]="true" [outlined]="true" (click)="addToWatchLater()"></p-button>
+    <p-button icon="pi pi-bookmark" [rounded]="true" [outlined]="true" (click)="toggleWatchLater()"></p-button>
     }
-    @if (movie.isFavorite) {
-    <p-button icon="pi pi-heart-fill" [rounded]="true" [outlined]="true" (click)="addToFavorites()"></p-button>
+    @if (isFavorite) {
+    <p-button icon="pi pi-heart-fill" [rounded]="true" [outlined]="true" (click)="toggleFavorites()"></p-button>
     } @else {
-    <p-button icon="pi pi-heart" [rounded]="true" [outlined]="true" (click)="addToFavorites()"></p-button>
+    <p-button icon="pi pi-heart" [rounded]="true" [outlined]="true" (click)="toggleFavorites()"></p-button>
     }
   </ng-template>
   <div class="movie__content">

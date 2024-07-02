@@ -1,49 +1,20 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import {
-  nowPlayingMovies,
-  popularMovies,
-  topRatedMovies,
-  upcomingMovies,
-} from '../../../assets/data/mock-data';
-import { MovieCardComponent } from '../../components/movie-card/movie-card.component';
+import { MoviesListComponent } from '../../components/movies-list/movies-list.component';
+import { MovieService } from '../../services/movie/movie.service';
 
 @Component({
   selector: 'app-watch-later',
   standalone: true,
-  imports: [MovieCardComponent],
+  imports: [MoviesListComponent],
   templateUrl: './watch-later.component.html',
   styleUrl: './watch-later.component.scss',
 })
 export class WatchLaterComponent {
-  watchLaterIds: string[] = [];
-  movies = [
-    ...popularMovies,
-    ...nowPlayingMovies,
-    ...topRatedMovies,
-    ...upcomingMovies,
-  ];
   watchLaterMovies: any[] = [];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private movieService: MovieService) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      const dataString = params['data'];
-      this.watchLaterIds = dataString ? JSON.parse(dataString) : [];
-    });
-
-    this.fillWatchLaterMoviesList();
-  }
-
-  fillWatchLaterMoviesList() {
-    if (this.watchLaterIds.length) {
-      for (const id of this.watchLaterIds) {
-        const movie = this.movies.find((movie) => movie.id === parseInt(id));
-        if (movie) this.watchLaterMovies.push(movie);
-      }
-    } else {
-      this.watchLaterMovies = [];
-    }
+    this.watchLaterMovies = this.movieService.getWatchLater();
   }
 }

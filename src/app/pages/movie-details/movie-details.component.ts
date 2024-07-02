@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {
-  nowPlayingMovies,
-  popularMovies,
-  topRatedMovies,
-  upcomingMovies,
-} from '../../../assets/data/mock-data';
 import { CommonModule } from '@angular/common';
+import { MovieService } from '../../services/movie/movie.service';
 
 @Component({
   selector: 'app-movie-details',
@@ -17,21 +12,15 @@ import { CommonModule } from '@angular/common';
 })
 export class MovieDetailsComponent implements OnInit {
   movie: any;
-  movies = [
-    ...popularMovies,
-    ...nowPlayingMovies,
-    ...upcomingMovies,
-    ...topRatedMovies,
-  ];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private movieService: MovieService
+  ) {}
 
   ngOnInit(): void {
     const movieId = this.route.snapshot.paramMap.get('id');
 
-    if (movieId)
-      this.movie = this.movies.find(
-        (currentMovie) => currentMovie.id === parseInt(movieId)
-      );
+    if (movieId) this.movie = this.movieService.getMovieById(parseInt(movieId));
   }
 }

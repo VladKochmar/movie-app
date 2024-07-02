@@ -1,7 +1,7 @@
 <div class="movies-list">
   @for (movie of movies; track movie.id) {
   <div>
-    <app-movie-card [movie]="movie" (addFavorite)="toggleFavorites($event)" (addWatchLater)="toggleWatchLater($event)"></app-movie-card>
+    <app-movie-card [movie]="movie"></app-movie-card>
   </div>
   }
 </div>
