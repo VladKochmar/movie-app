@@ -1,0 +1,17 @@
+<div class="movie-page">
+  <div class="movie-page__container">
+    <div class="movie-page__content">
+      <div class="movie-page__image-box">
+        <img [src]="movie.poster_path" [alt]="movie.title" class="movie-page__img">
+      </div>
+      <div class="movie-page__details">
+        <h1 class="movie-page__title title">{{movie.title}}</h1>
+        <ul class="movie-page__list">
+          <li class="movie-page__item">Release date <span>{{movie.release_date | date: 'dd.MM.yyyy'}}</span></li>
+          <li class="movie-page__item">Rating <span>{{movie.vote_average | number:'1.1-1'}}</span></li>
+        </ul>
+        <p class="movie-page__overview">{{ movie.overview }}</p>
+      </div>
+    </div>
+  </div>
+</div>

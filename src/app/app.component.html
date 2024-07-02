@@ -1,6 +1,5 @@
+<app-menu-sidebar></app-menu-sidebar>
 <main class="main">
-  <!-- <p-button icon="pi pi-bookmark" [rounded]="true" severity="secondary" [outlined]="true" /> -->
-  <app-movies-list [movies]="movies"></app-movies-list>
+  <router-outlet />
+  <router-outlet name="header" />
 </main>
-
-<router-outlet />
