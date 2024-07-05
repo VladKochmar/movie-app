@@ -1,73 +1,23 @@
 import { Injectable } from '@angular/core';
-import {
-  nowPlayingMovies,
-  popularMovies,
-  topRatedMovies,
-  upcomingMovies,
-} from '../../../data/mock-data';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import type { MovieApi } from '../../models/movie-api.model';
+import type { Movie } from '../../models/movie.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MovieService {
-  favorites: any[] = [];
-  watchLater: any[] = [];
-  allMovies: any[] = [
-    ...new Set([
-      ...upcomingMovies,
-      ...nowPlayingMovies,
-      ...topRatedMovies,
-      ...popularMovies,
-    ]),
-  ];
+  private apiUrl = 'https://api.themoviedb.org/3/movie/';
+  private apiKey = '?api_key=4adf5efe6dfe33683539fce6a8feac92';
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  getPopularMovies() {
-    return popularMovies;
+  getMoviesList(path: string): Observable<MovieApi> {
+    return this.http.get<MovieApi>(`${this.apiUrl}${path}${this.apiKey}`);
   }
 
-  getTopRatedMovies() {
-    return topRatedMovies;
-  }
-
-  getUpcomingMovies() {
-    return upcomingMovies;
-  }
-
-  getNowPlayingMovies() {
-    return nowPlayingMovies;
-  }
-
-  getFavorites() {
-    return this.favorites;
-  }
-
-  getWatchLater() {
-    return this.watchLater;
-  }
-
-  setMovieToFavorites(movie: any) {
-    if (!this.favorites.includes(movie)) this.favorites.push(movie);
-  }
-
-  removeMovieFromFavorites(movie: any) {
-    this.favorites = this.favorites.filter(
-      (currentMovie) => currentMovie.id !== movie.id
-    );
-  }
-
-  setMovieToWatchLater(movie: any) {
-    if (!this.watchLater.includes(movie)) this.watchLater.push(movie);
-  }
-
-  removeMovieFromWatchLater(movie: any) {
-    this.watchLater = this.watchLater.filter(
-      (currentMovie) => currentMovie !== movie
-    );
-  }
-
-  getMovieById(id: number) {
-    return this.allMovies.find((movie) => movie.id === id);
+  loadMovieById(id: number): Observable<Movie> {
+    return this.http.get<Movie>(`${this.apiUrl}${id}${this.apiKey}`);
   }
 }

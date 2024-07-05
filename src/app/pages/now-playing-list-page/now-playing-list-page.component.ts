@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../services/movie/movie.service';
 import { MoviesListComponent } from '../../components/movies-list/movies-list.component';
+import type { Movie } from '../../models/movie.model';
+
+const MOVIES_PATH = 'now_playing';
 
 @Component({
   selector: 'app-now-playing-list-page',
@@ -10,11 +13,13 @@ import { MoviesListComponent } from '../../components/movies-list/movies-list.co
   styleUrl: './now-playing-list-page.component.scss',
 })
 export class NowPlayingListPageComponent implements OnInit {
-  movies: any[] = [];
+  movies: Movie[] = [];
 
   constructor(private movieService: MovieService) {}
 
   ngOnInit(): void {
-    this.movies = this.movieService.getNowPlayingMovies();
+    this.movieService.getMoviesList(MOVIES_PATH).subscribe((data) => {
+      this.movies = data.results;
+    });
   }
 }

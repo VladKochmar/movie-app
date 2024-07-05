@@ -8,6 +8,7 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { MovieService } from '../../services/movie/movie.service';
+import type { Movie } from '../../models/movie.model';
 
 @Component({
   selector: 'app-movie-card',
@@ -25,30 +26,12 @@ import { MovieService } from '../../services/movie/movie.service';
   styleUrl: './movie-card.component.scss',
 })
 export class MovieCardComponent implements OnInit {
-  @Input() movie: any;
+  @Input() movie!: Movie;
 
   isFavorite: boolean = false;
   isWatchLater: boolean = false;
 
   constructor(private movieService: MovieService) {}
 
-  ngOnInit(): void {
-    this.isFavorite = this.movieService.getFavorites().includes(this.movie);
-    this.isWatchLater = this.movieService.getWatchLater().includes(this.movie);
-  }
-
-  toggleFavorites() {
-    if (this.isFavorite) this.movieService.removeMovieFromFavorites(this.movie);
-    else this.movieService.setMovieToFavorites(this.movie);
-
-    this.isFavorite = !this.isFavorite;
-  }
-
-  toggleWatchLater() {
-    if (this.isWatchLater)
-      this.movieService.removeMovieFromWatchLater(this.movie);
-    else this.movieService.setMovieToWatchLater(this.movie);
-
-    this.isWatchLater = !this.isWatchLater;
-  }
+  ngOnInit(): void {}
 }

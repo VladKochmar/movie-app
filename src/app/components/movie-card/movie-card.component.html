@@ -1,14 +1,14 @@
 <p-card styleClass="movie">
   <ng-template pTemplate="header">
     @if (isWatchLater) {
-    <p-button icon="pi pi-bookmark-fill" [rounded]="true" [outlined]="true" (click)="toggleWatchLater()"></p-button>
+    <p-button icon="pi pi-bookmark-fill" [rounded]="true" [outlined]="true"></p-button>
     } @else {
-    <p-button icon="pi pi-bookmark" [rounded]="true" [outlined]="true" (click)="toggleWatchLater()"></p-button>
+    <p-button icon="pi pi-bookmark" [rounded]="true" [outlined]="true"></p-button>
     }
     @if (isFavorite) {
-    <p-button icon="pi pi-heart-fill" [rounded]="true" [outlined]="true" (click)="toggleFavorites()"></p-button>
+    <p-button icon="pi pi-heart-fill" [rounded]="true" [outlined]="true"></p-button>
     } @else {
-    <p-button icon="pi pi-heart" [rounded]="true" [outlined]="true" (click)="toggleFavorites()"></p-button>
+    <p-button icon="pi pi-heart" [rounded]="true" [outlined]="true"></p-button>
     }
   </ng-template>
   <div class="movie__content">
@@ -21,5 +21,5 @@
     </ul>
     <p class="movie__description">{{ movie.overview | truncate: 250 }}</p>
   </div>
-  <img [src]="movie.poster_path | defaultImage:'../../../assets/images/movies-card/not-found.jpg'" [alt]="movie.title" class="movie__poster">
+  <img [src]="'https:/image.tmdb.org/t/p/w500'+movie.poster_path | defaultImage:'../../../assets/images/movies-card/not-found.jpg'" [alt]="movie.title" class="movie__poster">
 </p-card>

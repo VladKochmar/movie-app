@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../../services/movie/movie.service';
 import { MoviesListComponent } from '../../components/movies-list/movies-list.component';
+import type { Movie } from '../../models/movie.model';
+
+const MOVIES_PATH = 'popular';
 
 @Component({
   selector: 'app-popular-list-page',
@@ -10,11 +13,13 @@ import { MoviesListComponent } from '../../components/movies-list/movies-list.co
   styleUrl: './popular-list-page.component.scss',
 })
 export class PopularListPageComponent implements OnInit {
-  movies: any = [];
+  movies: Movie[] = [];
 
   constructor(private movieService: MovieService) {}
 
   ngOnInit(): void {
-    this.movies = this.movieService.getPopularMovies();
+    this.movieService.getMoviesList(MOVIES_PATH).subscribe((data) => {
+      this.movies = data.results;
+    });
   }
 }
