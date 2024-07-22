@@ -9,6 +9,10 @@ import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import { MovieService } from '../../services/movie/movie.service';
 import type { Movie } from '../../models/movie.model';
+import { Store } from '@ngrx/store';
+import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
+import { takeUntil } from 'rxjs';
+import { selectFavorites, selectWatchLater } from '../../store/selectors';
 
 @Component({
   selector: 'app-movie-card',
@@ -25,13 +29,45 @@ import type { Movie } from '../../models/movie.model';
   templateUrl: './movie-card.component.html',
   styleUrl: './movie-card.component.scss',
 })
-export class MovieCardComponent implements OnInit {
-  @Input() movie!: Movie;
+export class MovieCardComponent extends ClearObservable implements OnInit {
+  constructor(private movieService: MovieService, private store: Store) {
+    super();
+  }
+
+  @Input() movie: Movie | null = null;
 
   isFavorite: boolean = false;
   isWatchLater: boolean = false;
 
-  constructor(private movieService: MovieService) {}
+  toggleMovieToFavorite(movieId: number) {
+    this.isFavorite = !this.isFavorite;
+    this.movieService
+      .toggleMovieToFavorites(movieId, this.isFavorite)
+      .subscribe();
+  }
 
-  ngOnInit(): void {}
+  toggleMovieToWatchLater(movieId: number) {
+    this.isWatchLater = !this.isWatchLater;
+    this.movieService
+      .toggleMovieToWatchLater(movieId, this.isWatchLater)
+      .subscribe();
+  }
+
+  ngOnInit(): void {
+    this.store
+      .select(selectFavorites)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((favorites) => {
+        if (favorites && this.movie)
+          this.isFavorite = favorites.includes(this.movie);
+      });
+
+    this.store
+      .select(selectWatchLater)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((watchLater) => {
+        if (watchLater && this.movie)
+          this.isWatchLater = watchLater.includes(this.movie);
+      });
+  }
 }
