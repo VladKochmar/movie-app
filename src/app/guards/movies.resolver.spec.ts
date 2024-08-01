@@ -1,17 +1,27 @@
 import { TestBed } from '@angular/core/testing';
 import { ResolveFn } from '@angular/router';
 
-import { moviesResolver } from './movies.resolver';
+import { MoviesResolver } from './movies.resolver';
+import { Store } from '@ngrx/store';
 
-describe('moviesResolver', () => {
-  const executeResolver: ResolveFn<boolean> = (...resolverParameters) => 
-      TestBed.runInInjectionContext(() => moviesResolver(...resolverParameters));
+describe('MoviesResolver', () => {
+  let resolver: MoviesResolver;
+  let store: Store;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    const storeSpy = jest.fn(() => ({
+      dispatch: jest.fn(),
+    })) as any;
+
+    TestBed.configureTestingModule({
+      providers: [MoviesResolver, { provide: Store, useValue: storeSpy }],
+    });
+
+    resolver = TestBed.inject(MoviesResolver);
+    store = TestBed.inject(Store);
   });
 
-  it('should be created', () => {
-    expect(executeResolver).toBeTruthy();
+  it('should create the resolver instance', () => {
+    expect(resolver).toBeTruthy();
   });
 });

@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true,
 })
 export class DefaultImagePipe implements PipeTransform {
-  transform(value: string, fallback: string): string {
+  transform(value: string | null, fallback: string): string {
     return value ? value : fallback;
   }
 }

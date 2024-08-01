@@ -46,6 +46,21 @@ export const loadFavoritesFailure = createAction(
   props<{ error: any }>()
 );
 
+export const toggleMovieToFavorite = createAction(
+  '[Toggle Favorites] Toggle Movie To Favorites',
+  props<{ movieId: number; isFavorite: boolean }>()
+);
+
+export const toggleMovieToFavoriteSuccess = createAction(
+  '[Toggle Favorites] Toggle Movie To Favorites Success',
+  props<{ status_code: number; status_message: string }>()
+);
+
+export const toggleMovieToFavoriteFailure = createAction(
+  '[Toggle Favorites] Toggle Movie To Favorites Failure',
+  props<{ error: any }>()
+);
+
 // Watch Later
 export const loadWatchLater = createAction('[Watch Later] Load Watch Later');
 
@@ -56,5 +71,20 @@ export const loadWatchLaterSuccess = createAction(
 
 export const loadWatchLaterFailure = createAction(
   '[Watch Later] Load Watch Later Faivlure',
+  props<{ error: any }>()
+);
+
+export const toggleMovieToWatchLater = createAction(
+  '[Toggle Watch Later] Toggle Movie To Watch Later',
+  props<{ movieId: number; isWatchLater: boolean }>()
+);
+
+export const toggleMovieToWatchLaterSuccess = createAction(
+  '[Toggle Watch Later] Toggle Movie To Watch Later Success',
+  props<{ status_code: number; status_message: string }>()
+);
+
+export const toggleMovieToWatchLaterFailure = createAction(
+  '[Toggle Watch Later] Toggle Movie To Watch Later Failure',
   props<{ error: any }>()
 );

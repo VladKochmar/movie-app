@@ -1,29 +1,47 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterTestingModule } from '@angular/router/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import { HeaderComponent } from './components/header/header.component';
+import { MovieService } from './services/movie/movie.service';
+import { AuthService } from './services/auth/auth.service';
+import { of } from 'rxjs';
 
 describe('AppComponent', () => {
+  let component: AppComponent;
+  let fixture: any;
+  let movieServiceMock: any;
+  let authServiceMock: any;
+  let storeMock: any;
+
   beforeEach(async () => {
+    movieServiceMock = {
+      setAccountId: jest.fn(),
+    };
+
+    authServiceMock = {
+      authenticateAndGetAccountId: jest.fn().mockReturnValue(of('123')),
+    };
+
+    storeMock = {
+      dispatch: jest.fn(),
+    };
+
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [RouterTestingModule, HeaderComponent, HttpClientModule],
+      providers: [
+        { provide: MovieService, useValue: movieServiceMock },
+        { provide: AuthService, useValue: authServiceMock },
+        provideMockStore(),
+      ],
     }).compileComponents();
+
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
   });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have the 'movie-app' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('movie-app');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, movie-app');
+    expect(component).toBeTruthy();
   });
 });

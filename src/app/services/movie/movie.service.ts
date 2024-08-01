@@ -23,6 +23,14 @@ export class MovieService {
     this.accountId = id;
   }
 
+  getSessionId() {
+    return this.sessionId;
+  }
+
+  getAccoundId() {
+    return this.accountId;
+  }
+
   getMoviesByCategory(category: string): Observable<MovieApi> {
     return this.http.get<MovieApi>(
       `${environment.API_URL}/movie/${category}?api_key=${environment.API_KEY}`

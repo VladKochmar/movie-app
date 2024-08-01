@@ -33,8 +33,5 @@ export class AppComponent implements OnInit {
         console.log(`Error: ${error}`);
       }
     );
-
-    this.store.dispatch(loadFavorites());
-    this.store.dispatch(loadWatchLater());
   }
 }

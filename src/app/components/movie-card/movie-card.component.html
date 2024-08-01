@@ -22,6 +22,6 @@
     </ul>
     <p class="movie__description">{{ movie.overview | truncate: 250 }}</p>
   </div>
-  <img [src]="'https:/image.tmdb.org/t/p/w500'+movie.poster_path | defaultImage:'../../../assets/images/movies-card/not-found.jpg'" [alt]="movie.title" class="movie__poster">
+  <img [src]="imageSrc | defaultImage:defaultImageSrc" [alt]="movie.title" class="movie__poster">
   }
 </p-card>

@@ -54,6 +54,27 @@ export class MoviesEffects {
     )
   );
 
+  toggleMovieToFavorite$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.toggleMovieToFavorite),
+      mergeMap(({ movieId, isFavorite }) => {
+        return this.movieService
+          .toggleMovieToFavorites(movieId, isFavorite)
+          .pipe(
+            map((respone) =>
+              MoviesActions.toggleMovieToFavoriteSuccess({
+                status_code: respone.status_code,
+                status_message: respone.status_message,
+              })
+            ),
+            catchError((error) =>
+              of(MoviesActions.toggleMovieToFavoriteFailure({ error }))
+            )
+          );
+      })
+    )
+  );
+
   loadWatchLater$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadWatchLater),
@@ -67,6 +88,27 @@ export class MoviesEffects {
             of(MoviesActions.loadWatchLaterFailure({ error }))
           )
         );
+      })
+    )
+  );
+
+  toggleMovieToWatchLater$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.toggleMovieToWatchLater),
+      mergeMap(({ movieId, isWatchLater }) => {
+        return this.movieService
+          .toggleMovieToWatchLater(movieId, isWatchLater)
+          .pipe(
+            map((respone) =>
+              MoviesActions.toggleMovieToWatchLaterSuccess({
+                status_code: respone.status_code,
+                status_message: respone.status_message,
+              })
+            ),
+            catchError((error) =>
+              of(MoviesActions.toggleMovieToWatchLaterFailure({ error }))
+            )
+          );
       })
     )
   );

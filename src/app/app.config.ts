@@ -12,14 +12,14 @@ import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { MoviesReducer } from './store/reducer';
-import { MoviesEffects } from './store/effecrs';
+import { MoviesEffects } from './store/effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     importProvidersFrom(BrowserAnimationsModule),
     provideHttpClient(),
-    provideStore({ MovieState: MoviesReducer }),
+    provideStore({ movieState: MoviesReducer }),
     provideEffects([MoviesEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
   ],
