@@ -1,26 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MovieService } from '../../services/movie/movie.service';
+import { DefaultImagePipe } from '../../pipes/default-image/default-image.pipe';
+import type { Movie } from '../../models/movie.model';
+import { Store } from '@ngrx/store';
+import { selectCurrentMovie } from '../../store/selectors';
+import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DefaultImagePipe],
   templateUrl: './movie-details.component.html',
   styleUrl: './movie-details.component.scss',
 })
-export class MovieDetailsComponent implements OnInit {
-  movie: any;
+export class MovieDetailsComponent extends ClearObservable implements OnInit {
+  movie: Movie | null = null;
+  selectedMovie$ = this.store.select(selectCurrentMovie);
 
-  constructor(
-    private route: ActivatedRoute,
-    private movieService: MovieService
-  ) {}
+  constructor(private store: Store) {
+    super();
+  }
 
   ngOnInit(): void {
-    const movieId = this.route.snapshot.paramMap.get('id');
-
-    if (movieId) this.movie = this.movieService.getMovieById(parseInt(movieId));
+    this.selectedMovie$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((currentMovie) => {
+        this.movie = currentMovie;
+      });
   }
 }

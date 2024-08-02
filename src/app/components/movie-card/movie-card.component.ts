@@ -7,7 +7,15 @@ import { PrimeIcons } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
-import { MovieService } from '../../services/movie/movie.service';
+import type { Movie } from '../../models/movie.model';
+import { Store } from '@ngrx/store';
+import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
+import { takeUntil } from 'rxjs';
+import { isFavorite, isWatchLater } from '../../store/selectors';
+import {
+  toggleMovieToFavorite,
+  toggleMovieToWatchLater,
+} from '../../store/actions';
 
 @Component({
   selector: 'app-movie-card',
@@ -24,31 +32,52 @@ import { MovieService } from '../../services/movie/movie.service';
   templateUrl: './movie-card.component.html',
   styleUrl: './movie-card.component.scss',
 })
-export class MovieCardComponent implements OnInit {
-  @Input() movie: any;
+export class MovieCardComponent extends ClearObservable implements OnInit {
+  constructor(private store: Store) {
+    super();
+  }
+
+  @Input() movie: Movie | null = null;
 
   isFavorite: boolean = false;
   isWatchLater: boolean = false;
 
-  constructor(private movieService: MovieService) {}
+  imageSrc: string | null = null;
+  defaultImageSrc: string = '../../../assets/images/movies-card/not-found.jpg';
+
+  toggleMovieToFavorite(movieId: number) {
+    this.isFavorite = !this.isFavorite;
+    this.store.dispatch(
+      toggleMovieToFavorite({ movieId, isFavorite: this.isFavorite })
+    );
+  }
+
+  toggleMovieToWatchLater(movieId: number) {
+    this.isWatchLater = !this.isWatchLater;
+    this.store.dispatch(
+      toggleMovieToWatchLater({ movieId, isWatchLater: this.isWatchLater })
+    );
+  }
 
   ngOnInit(): void {
-    this.isFavorite = this.movieService.getFavorites().includes(this.movie);
-    this.isWatchLater = this.movieService.getWatchLater().includes(this.movie);
-  }
+    this.imageSrc = this.movie?.poster_path
+      ? 'https:/image.tmdb.org/t/p/w500' + this.movie?.poster_path
+      : null;
 
-  toggleFavorites() {
-    if (this.isFavorite) this.movieService.removeMovieFromFavorites(this.movie);
-    else this.movieService.setMovieToFavorites(this.movie);
+    if (this.movie) {
+      this.store
+        .select(isFavorite(this.movie))
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response) => {
+          this.isFavorite = response;
+        });
 
-    this.isFavorite = !this.isFavorite;
-  }
-
-  toggleWatchLater() {
-    if (this.isWatchLater)
-      this.movieService.removeMovieFromWatchLater(this.movie);
-    else this.movieService.setMovieToWatchLater(this.movie);
-
-    this.isWatchLater = !this.isWatchLater;
+      this.store
+        .select(isWatchLater(this.movie))
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response) => {
+          this.isWatchLater = response;
+        });
+    }
   }
 }
