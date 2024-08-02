@@ -23,7 +23,9 @@ export const isFavorite = (movie: Movie) =>
     let result = false;
 
     if (state.favoriteMovies) {
-      result = state.favoriteMovies.includes(movie);
+      result = state.favoriteMovies.some(
+        (currentMovie) => currentMovie.id === movie.id
+      );
     }
 
     return result;
@@ -38,7 +40,10 @@ export const isWatchLater = (movie: Movie) =>
   createSelector(selectMovieState, (state) => {
     let result = false;
 
-    if (state.watchLaterMovies) result = state.watchLaterMovies.includes(movie);
+    if (state.watchLaterMovies)
+      result = state.watchLaterMovies.some(
+        (currentMovie) => currentMovie.id === movie.id
+      );
 
     return result;
   });

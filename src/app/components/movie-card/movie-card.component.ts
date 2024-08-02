@@ -69,7 +69,6 @@ export class MovieCardComponent extends ClearObservable implements OnInit {
         .select(isFavorite(this.movie))
         .pipe(takeUntil(this.destroy$))
         .subscribe((response) => {
-          console.log(response);
           this.isFavorite = response;
         });
 
