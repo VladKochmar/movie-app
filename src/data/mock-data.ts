@@ -712,3 +712,17 @@ export const upcomingMovies = [
     vote_count: 287,
   },
 ];
+
+export const genres = [
+  { name: 'Drama', code: 'drama' },
+  { name: 'Action', code: 'action' },
+  { name: 'Romance', code: 'romance' },
+  { name: 'Comedy', code: 'comedy' },
+  { name: 'Thriller', code: 'thriller' },
+  { name: 'Fantasy', code: 'fantasy' },
+  { name: 'Horror', code: 'horror' },
+  { name: 'Crime', code: 'crime' },
+  { name: 'Musical', code: 'musical' },
+  { name: 'Documentary', code: 'documentary' },
+  { name: 'Mystery', code: 'mystery' },
+];

@@ -6,11 +6,12 @@ import { Store } from '@ngrx/store';
 import { selectCurrentMovie } from '../../store/selectors';
 import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
 import { takeUntil } from 'rxjs';
+import { NewsSubscriptionComponent } from '../../components/news-subscription/news-subscription.component';
 
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule, DefaultImagePipe],
+  imports: [CommonModule, DefaultImagePipe, NewsSubscriptionComponent],
   templateUrl: './movie-details.component.html',
   styleUrl: './movie-details.component.scss',
 })

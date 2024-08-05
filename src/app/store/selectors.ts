@@ -47,3 +47,8 @@ export const isWatchLater = (movie: Movie) =>
 
     return result;
   });
+
+// News Subscription
+export const selectSubscriber = createSelector(selectMovieState, (state) => {
+  return state.subscriber;
+});

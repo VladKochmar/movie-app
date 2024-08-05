@@ -2,11 +2,16 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { MovieService } from '../services/movie/movie.service';
 import * as MoviesActions from './actions';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import { NewsSubscriptionService } from '../services/news-subscription/news-subscription.service';
 
 @Injectable()
 export class MoviesEffects {
-  constructor(private actions$: Actions, private movieService: MovieService) {}
+  constructor(
+    private actions$: Actions,
+    private movieService: MovieService,
+    private newsSubscriptionService: NewsSubscriptionService
+  ) {}
 
   loadMoviesByCategory$ = createEffect(() =>
     this.actions$.pipe(
@@ -111,5 +116,42 @@ export class MoviesEffects {
           );
       })
     )
+  );
+
+  // News Subscription
+  getSubscriber$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.getSubscriber),
+      map(() => {
+        const subscriberData = this.newsSubscriptionService.getSubscriber();
+        return MoviesActions.getSubscriberSuccess({
+          subscriber: subscriberData,
+        });
+      })
+    )
+  );
+
+  addSubscription$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(MoviesActions.setSubscriberToLocalStorage),
+        tap((action) =>
+          this.newsSubscriptionService.addSubscriptionToLocalSotrage(
+            action.subscriber
+          )
+        )
+      ),
+    { dispatch: false }
+  );
+
+  removeSubscription$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(MoviesActions.removeSubsciption),
+        tap(() =>
+          this.newsSubscriptionService.removeSubsciptionFromLocalStorage()
+        )
+      ),
+    { dispatch: false }
   );
 }

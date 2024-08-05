@@ -8,9 +8,10 @@ import { MoviesByCategoryComponent } from './pages/movies-by-category/movies-by-
 import { HomeComponent } from './pages/home/home.component';
 import { FavoritesResolver } from './guards/favorites.resolver';
 import { WatchLaterResolver } from './guards/watch-later.resolver';
+import { HomeResolver } from './guards/home.resolver';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, resolve: { home: HomeResolver } },
   {
     path: 'movie/:id',
     component: MovieDetailsComponent,

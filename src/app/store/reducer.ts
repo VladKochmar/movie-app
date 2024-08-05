@@ -67,5 +67,13 @@ export const MoviesReducer = createReducer(
       watchLaterMovies: null,
       error: error,
     };
+  }),
+
+  // News Subscription
+  on(MoviesActions.getSubscriberSuccess, (state, { subscriber }) => {
+    return {
+      ...state,
+      subscriber: subscriber,
+    };
   })
 );

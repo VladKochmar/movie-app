@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Movie } from '../models/movie.model';
+import { SubscriberData } from '../models/subscriber.model';
 
 // Movies
 export const loadMoviesByCategory = createAction(
@@ -87,4 +88,21 @@ export const toggleMovieToWatchLaterSuccess = createAction(
 export const toggleMovieToWatchLaterFailure = createAction(
   '[Toggle Watch Later] Toggle Movie To Watch Later Failure',
   props<{ error: any }>()
+);
+
+// News Subscription
+export const getSubscriber = createAction('[News Subscription] Get Subscriber');
+
+export const getSubscriberSuccess = createAction(
+  '[News Subscription] Get Subscriber Success',
+  props<{ subscriber: SubscriberData | null }>()
+);
+
+export const setSubscriberToLocalStorage = createAction(
+  '[News Subscription] Set Subscriber To LocalStorage',
+  props<{ subscriber: SubscriberData }>()
+);
+
+export const removeSubsciption = createAction(
+  '[News Subscription] Remove Subsciption'
 );
