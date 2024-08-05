@@ -1,8 +1,9 @@
 import { popularMovies } from '../../data/mock-data';
+import { SubscriberData } from '../models/subscriber.model';
 import {
+  getSubscriberSuccess,
   loadFavoritesFailure,
   loadFavoritesSuccess,
-  loadMovieById,
   loadMovieByIdFailure,
   loadMovieByIdSuccess,
   loadMoviesFailure,
@@ -119,6 +120,28 @@ describe('MoviesReducer', () => {
     };
 
     const state = MoviesReducer(initialState, loadWatchLaterFailure({ error }));
+    expect(state).toEqual(expectedState);
+  });
+
+  it('should handle getSubscriberSuccess', () => {
+    const subscriber: SubscriberData | null = {
+      name: 'User',
+      email: 'user@gmail.com',
+      date: new Date(),
+      selectedGenres: [],
+      agreement: true,
+    };
+
+    const expectedState = {
+      ...initialState,
+      subscriber: subscriber,
+    };
+
+    const state = MoviesReducer(
+      initialState,
+      getSubscriberSuccess({ subscriber })
+    );
+
     expect(state).toEqual(expectedState);
   });
 });

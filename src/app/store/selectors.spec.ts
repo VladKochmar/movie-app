@@ -3,10 +3,19 @@ import {
   selectCurrentMovie,
   selectFavorites,
   selectMovies,
+  selectSubscriber,
   selectWatchLater,
 } from './selectors';
 import { initialState } from './state';
 import { MovieState } from './state';
+
+const subscriberData = {
+  name: 'User',
+  email: 'user@gmail.com',
+  date: new Date(),
+  selectedGenres: [],
+  agreement: true,
+};
 
 describe('Selectors', () => {
   const initialState: MovieState = {
@@ -14,6 +23,7 @@ describe('Selectors', () => {
     movies: popularMovies,
     favoriteMovies: popularMovies,
     watchLaterMovies: popularMovies,
+    subscriber: subscriberData,
   };
 
   it('should select the movies from the state', () => {
@@ -35,6 +45,12 @@ describe('Selectors', () => {
   it('should select the watchLaterMovies from the state', () => {
     expect(selectWatchLater.projector(initialState)).toEqual(
       initialState.watchLaterMovies
+    );
+  });
+
+  it('should select the subscriber from the state', () => {
+    expect(selectSubscriber.projector(initialState)).toEqual(
+      initialState.subscriber
     );
   });
 });

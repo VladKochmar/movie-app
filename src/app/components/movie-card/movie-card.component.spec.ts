@@ -1,9 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { MovieCardComponent } from './movie-card.component';
-import { Movie } from '../../models/movie.model';
-import { popularMovies } from '../../../data/mock-data';
-import { selectFavorites, selectWatchLater } from '../../store/selectors';
 import { of } from 'rxjs';
 import { MovieService } from '../../services/movie/movie.service';
 import { Store } from '@ngrx/store';
