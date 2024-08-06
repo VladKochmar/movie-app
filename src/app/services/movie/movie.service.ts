@@ -43,6 +43,13 @@ export class MovieService {
     );
   }
 
+  loadMoviesByTitle(movieTitle: string): Observable<MovieApi> {
+    const title = movieTitle.trim().replace(/ /g, '+');
+    return this.http.get<MovieApi>(
+      `${environment.API_URL}/search/movie?query=${title}&api_key=${environment.API_KEY}`
+    );
+  }
+
   // Watch Later
   loadWatchLater(): Observable<MovieApi> {
     const headers = {

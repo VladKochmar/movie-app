@@ -98,7 +98,7 @@ describe('MoviesEffects', () => {
     });
   });
 
-  it('should return a loadMovieByIdSuccess on success', (done) => {
+  it('should return a loadMovieSuccess on success', (done) => {
     const mockMovie: Movie = popularMovies[0];
 
     actions$.next(MoviesActions.loadMovieById({ id: 1022789 }));
@@ -106,7 +106,7 @@ describe('MoviesEffects', () => {
 
     effects.loadMovieById$.subscribe((result) => {
       expect(result).toEqual(
-        MoviesActions.loadMovieByIdSuccess({ movie: mockMovie })
+        MoviesActions.loadMovieSuccess({ movie: mockMovie })
       );
       done();
     });

@@ -2,7 +2,15 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { MovieService } from '../services/movie/movie.service';
 import * as MoviesActions from './actions';
-import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { NewsSubscriptionService } from '../services/news-subscription/news-subscription.service';
 
 @Injectable()
@@ -28,15 +36,36 @@ export class MoviesEffects {
     )
   );
 
+  loadMoviesByTitle$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.loadMoviesByTitle),
+      debounceTime(300),
+      mergeMap(({ title }) => {
+        return this.movieService.loadMoviesByTitle(title).pipe(
+          map((movies) => {
+            const titlesList = movies.results.map((movie) => ({
+              id: movie.id,
+              title: movie.title,
+            }));
+            return MoviesActions.loadMoviesByTitleSuccess({
+              titles: titlesList,
+            });
+          }),
+          catchError((error) =>
+            of(MoviesActions.loadMoviesByTitleFailure({ error }))
+          )
+        );
+      })
+    )
+  );
+
   loadMovieById$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadMovieById),
       mergeMap(({ id }) => {
         return this.movieService.loadMovieById(id).pipe(
-          map((movie) => MoviesActions.loadMovieByIdSuccess({ movie })),
-          catchError((error) =>
-            of(MoviesActions.loadMovieByIdFailure({ error }))
-          )
+          map((movie) => MoviesActions.loadMovieSuccess({ movie })),
+          catchError((error) => of(MoviesActions.loadMovieFailure({ error })))
         );
       })
     )

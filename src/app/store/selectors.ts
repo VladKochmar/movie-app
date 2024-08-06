@@ -9,6 +9,13 @@ export const selectMovies = createSelector(selectMovieState, (state) => {
   return state.movies;
 });
 
+export const selectSearchedMoviesTitles = createSelector(
+  selectMovieState,
+  (state) => {
+    return state.searchedMoviesTitles;
+  }
+);
+
 export const selectCurrentMovie = createSelector(selectMovieState, (state) => {
   return state.currentMovie;
 });

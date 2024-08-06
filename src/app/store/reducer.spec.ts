@@ -4,8 +4,8 @@ import {
   getSubscriberSuccess,
   loadFavoritesFailure,
   loadFavoritesSuccess,
-  loadMovieByIdFailure,
-  loadMovieByIdSuccess,
+  loadMovieFailure,
+  loadMovieSuccess,
   loadMoviesFailure,
   loadMoviesSuccess,
   loadWatchLaterFailure,
@@ -45,7 +45,7 @@ describe('MoviesReducer', () => {
     expect(state).toEqual(expectedState);
   });
 
-  it('should handle loadMovieByIdSuccess', () => {
+  it('should handle loadMovieSuccess', () => {
     const movie = popularMovies[0];
 
     const expectedState = {
@@ -53,11 +53,11 @@ describe('MoviesReducer', () => {
       currentMovie: movie,
     };
 
-    const state = MoviesReducer(initialState, loadMovieByIdSuccess({ movie }));
+    const state = MoviesReducer(initialState, loadMovieSuccess({ movie }));
     expect(state).toEqual(expectedState);
   });
 
-  it('should handle loadMoviesByIdFailure', () => {
+  it('should handle loadMoviesFailure', () => {
     const error = 'Some Error';
 
     const expectedState = {
@@ -66,7 +66,7 @@ describe('MoviesReducer', () => {
       currentMovie: null,
     };
 
-    const state = MoviesReducer(initialState, loadMovieByIdFailure({ error }));
+    const state = MoviesReducer(initialState, loadMovieFailure({ error }));
     expect(state).toEqual(expectedState);
   });
 

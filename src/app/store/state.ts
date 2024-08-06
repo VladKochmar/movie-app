@@ -1,5 +1,6 @@
 import { Movie } from '../models/movie.model';
 import { SubscriberData } from '../models/subscriber.model';
+import { TitleItem } from '../models/title-item.model';
 
 export interface MovieState {
   currentMovie: Movie | null;
@@ -7,6 +8,7 @@ export interface MovieState {
   favoriteMovies: Movie[] | null;
   watchLaterMovies: Movie[] | null;
   subscriber: SubscriberData | null;
+  searchedMoviesTitles: TitleItem[] | null;
 }
 
 export const initialState: MovieState = {
@@ -15,4 +17,5 @@ export const initialState: MovieState = {
   favoriteMovies: null,
   watchLaterMovies: null,
   subscriber: null,
+  searchedMoviesTitles: null,
 };

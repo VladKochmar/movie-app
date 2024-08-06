@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Movie } from '../models/movie.model';
 import { SubscriberData } from '../models/subscriber.model';
+import { TitleItem } from '../models/title-item.model';
 
 // Movies
 export const loadMoviesByCategory = createAction(
@@ -18,22 +19,36 @@ export const loadMoviesFailure = createAction(
   props<{ error: any }>()
 );
 
+export const loadMoviesByTitle = createAction(
+  '[Search Movies] Load Movies By Title',
+  props<{ title: string }>()
+);
+
+export const loadMoviesByTitleSuccess = createAction(
+  '[Search Movies] Load Movies By Title Success',
+  props<{ titles: TitleItem[] | null }>()
+);
+
+export const loadMoviesByTitleFailure = createAction(
+  '[Search Movies] Load Movies By Title Failure',
+  props<{ error: any }>()
+);
+
 // Movie
 export const loadMovieById = createAction(
   '[Movie] Load Movie By ID',
   props<{ id: number }>()
 );
 
-export const loadMovieByIdSuccess = createAction(
+export const loadMovieSuccess = createAction(
   '[Movie] Load Movie By ID Success',
   props<{ movie: Movie | null }>()
 );
 
-export const loadMovieByIdFailure = createAction(
+export const loadMovieFailure = createAction(
   '[Movie] Load Movie By ID Failure',
   props<{ error: any }>()
 );
-
 // Favorites
 export const loadFavorites = createAction('[Favorites] Load Favorites');
 

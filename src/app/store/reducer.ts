@@ -21,15 +21,30 @@ export const MoviesReducer = createReducer(
     };
   }),
 
+  on(MoviesActions.loadMoviesByTitleSuccess, (state, { titles }) => {
+    return {
+      ...state,
+      searchedMoviesTitles: titles,
+    };
+  }),
+
+  on(MoviesActions.loadMoviesByTitleFailure, (state, { error }) => {
+    return {
+      ...state,
+      searchedMoviesTitles: null,
+      error: error,
+    };
+  }),
+
   // Movie
-  on(MoviesActions.loadMovieByIdSuccess, (state, { movie }) => {
+  on(MoviesActions.loadMovieSuccess, (state, { movie }) => {
     return {
       ...state,
       currentMovie: movie,
     };
   }),
 
-  on(MoviesActions.loadMovieByIdFailure, (state, { error }) => {
+  on(MoviesActions.loadMovieFailure, (state, { error }) => {
     return {
       ...state,
       currentMovie: null,
