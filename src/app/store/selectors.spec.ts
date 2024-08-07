@@ -3,6 +3,7 @@ import {
   selectCurrentMovie,
   selectFavorites,
   selectMovies,
+  selectSearchedMoviesTitles,
   selectSubscriber,
   selectWatchLater,
 } from './selectors';
@@ -24,6 +25,7 @@ describe('Selectors', () => {
     favoriteMovies: popularMovies,
     watchLaterMovies: popularMovies,
     subscriber: subscriberData,
+    searchedMoviesTitles: null,
   };
 
   it('should select the movies from the state', () => {
@@ -51,6 +53,12 @@ describe('Selectors', () => {
   it('should select the subscriber from the state', () => {
     expect(selectSubscriber.projector(initialState)).toEqual(
       initialState.subscriber
+    );
+  });
+
+  it('should select the selectSearchedMoviesTitles from the state', () => {
+    expect(selectSearchedMoviesTitles.projector(initialState)).toEqual(
+      initialState.searchedMoviesTitles
     );
   });
 });

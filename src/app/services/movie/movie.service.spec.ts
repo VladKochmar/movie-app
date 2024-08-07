@@ -149,20 +149,4 @@ describe('MovieService', () => {
 
     req.flush(responseBody);
   });
-
-  it('should return movie by title', () => {
-    const title = 'Inside Out 2';
-    const mockMovie: Movie = popularMovies[0];
-
-    service.loadMovieByTitle(title).subscribe((data) => {
-      expect(data).toEqual(mockMovie);
-    });
-
-    const req = httpTestingController.expectOne(
-      `${environment.API_URL}/search/movie?query=Inside+Out+2&api_key=${environment.API_KEY}`
-    );
-
-    expect(req.request.method).toEqual('GET');
-    req.flush(mockMovie);
-  });
 });
