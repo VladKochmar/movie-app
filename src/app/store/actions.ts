@@ -11,6 +11,11 @@ export const loadMoviesByCategory = createAction(
   props<{ category: string }>()
 );
 
+export const loadFilteredMovies = createAction(
+  '[Movies List] Load Filtered Movies By Category',
+  props<{ category: string }>()
+);
+
 export const loadMoviesSuccess = createAction(
   '[Movies List] Load Movies Success',
   props<{ movies: Movie[] | null }>()

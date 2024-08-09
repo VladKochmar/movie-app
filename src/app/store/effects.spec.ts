@@ -1,4 +1,4 @@
-import { of, ReplaySubject, throwError } from 'rxjs';
+import { of, ReplaySubject } from 'rxjs';
 import { MoviesEffects } from './effects';
 import { MovieService } from '../services/movie/movie.service';
 import { TestBed } from '@angular/core/testing';
@@ -40,17 +40,11 @@ describe('MoviesEffects', () => {
 
   it('should return a loadMoviesSuccess action with movies on success', (done) => {
     const mockMovies: Movie[] = popularMovies;
-    const mockMovieApi: MovieApi = {
-      total_pages: 1,
-      page: 1,
-      total_results: 1,
-      results: mockMovies,
-    };
 
-    actions$.next(MoviesActions.loadMoviesByCategory({ category: 'popular' }));
-    movieService.getMoviesByCategory = jest.fn(() => of(mockMovieApi));
+    actions$.next(MoviesActions.loadFilteredMovies({ category: 'popular' }));
+    movieService.loadFilteredMovies = jest.fn(() => of(mockMovies));
 
-    effects.loadMoviesByCategory$.subscribe((result) => {
+    effects.loadFilteredMovies$.subscribe((result) => {
       expect(result).toEqual(
         MoviesActions.loadMoviesSuccess({ movies: mockMovies })
       );

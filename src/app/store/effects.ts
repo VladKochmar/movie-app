@@ -21,9 +21,9 @@ export class MoviesEffects {
     private newsSubscriptionService: NewsSubscriptionService
   ) {}
 
-  loadMoviesByCategory$ = createEffect(() =>
+  loadFilteredMovies$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MoviesActions.loadMoviesByCategory),
+      ofType(MoviesActions.loadFilteredMovies),
       mergeMap(({ category }) => {
         return this.movieService.loadFilteredMovies(category).pipe(
           map((movies) => {

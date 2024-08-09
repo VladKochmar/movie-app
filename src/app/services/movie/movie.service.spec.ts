@@ -8,6 +8,8 @@ import { MovieService } from './movie.service';
 import { Movie } from '../../models/movie.model';
 import { popularMovies } from '../../../data/mock-data';
 import { environment } from '../../../environments/environment.development';
+import { of } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 describe('MovieService', () => {
   let service: MovieService;
@@ -15,9 +17,14 @@ describe('MovieService', () => {
   let injector: TestBed;
 
   beforeEach(() => {
+    const storeMock = {
+      select: jest.fn(() => of(null)),
+      dispatch: jest.fn(),
+    };
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [MovieService],
+      providers: [MovieService, { provide: Store, useValue: storeMock }],
     });
 
     injector = getTestBed();

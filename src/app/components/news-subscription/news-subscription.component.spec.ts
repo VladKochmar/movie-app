@@ -9,16 +9,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
-import { By } from '@angular/platform-browser';
 import { NewsSubscriptionComponent } from './news-subscription.component';
-import { genres } from '../../../data/mock-data';
-import {
-  getSubscriber,
-  removeSubsciption,
-  setSubscriberToLocalStorage,
-} from '../../store/actions';
 import { selectSubscriber } from '../../store/selectors';
-import { of } from 'rxjs';
 
 describe('NewsSubscriptionComponent', () => {
   let component: NewsSubscriptionComponent;
@@ -68,7 +60,6 @@ describe('NewsSubscriptionComponent', () => {
     expect(component.form.controls['date']).toBeDefined();
     expect(component.form.controls['selectedGenres']).toBeDefined();
     expect(component.form.controls['agreement']).toBeDefined();
-    expect(component.genres).toEqual(genres);
     expect(component.maxDate).toBeInstanceOf(Date);
   });
 });

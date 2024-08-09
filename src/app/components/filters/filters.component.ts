@@ -12,7 +12,7 @@ import {
 import { takeUntil } from 'rxjs';
 import { SortType } from '../../models/sort-type.model';
 import {
-  loadMoviesByCategory,
+  loadFilteredMovies,
   setSelectedGenre,
   setSelectedSortType,
 } from '../../store/actions';
@@ -71,7 +71,7 @@ export class FiltersComponent extends ClearObservable implements OnInit {
   onGenreChange() {
     this.store.dispatch(setSelectedGenre({ genre: this.currentGenre }));
     if (this.category)
-      this.store.dispatch(loadMoviesByCategory({ category: this.category }));
+      this.store.dispatch(loadFilteredMovies({ category: this.category }));
   }
 
   onSortTypeChange() {
