@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { MoviesListComponent } from '../../components/movies-list/movies-list.component';
 import type { Movie } from '../../models/movie.model';
 import { Store } from '@ngrx/store';
-import { selectMovies } from '../../store/selectors';
+import { selectSortedMovies } from '../../store/selectors';
 import { map, takeUntil } from 'rxjs';
 import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
 import { ActivatedRoute } from '@angular/router';
+import { FiltersComponent } from '../../components/filters/filters.component';
+import { FavoritesComponent } from '../favorites/favorites.component';
 
 @Component({
   selector: 'app-movies-by-category',
   standalone: true,
-  imports: [MoviesListComponent],
+  imports: [MoviesListComponent, FiltersComponent, FavoritesComponent],
   templateUrl: './movies-by-category.component.html',
   styleUrl: './movies-by-category.component.scss',
 })
@@ -20,7 +22,7 @@ export class MoviesByCategoryComponent
 {
   title: string | null = null;
   movies: Movie[] | null = [];
-  selectedMovies$ = this.store.select(selectMovies);
+  selectedSortedMovies$ = this.store.select(selectSortedMovies);
 
   constructor(private store: Store, private route: ActivatedRoute) {
     super();
@@ -60,7 +62,7 @@ export class MoviesByCategoryComponent
         this.title = this.getTitleByCategory(category);
       });
 
-    this.selectedMovies$
+    this.selectedSortedMovies$
       .pipe(takeUntil(this.destroy$))
       .subscribe((moviesList) => {
         this.movies = moviesList;

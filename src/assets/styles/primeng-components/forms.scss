@@ -1,3 +1,33 @@
 .item-form-news {
   width: 100%;
 }
+
+.filter__select {
+  &.p-dropdown {
+    border: none;
+    background: transparent;
+    &:not(.p-disabled).p-focus {
+      box-shadow: none;
+      border-color: none;
+      .p-dropdown-trigger {
+        transform: rotateX(180deg);
+      }
+    }
+  }
+  .p-icon-wrapper {
+    width: 1.375rem;
+    padding-left: 0.5rem;
+  }
+  .p-dropdown-clear-icon {
+  }
+  .p-dropdown-panel .p-dropdown-items,
+  .p-inputtext {
+    padding: 0;
+  }
+  .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    padding: 0.5rem;
+  }
+  .p-dropdown-trigger {
+    transition: transform 0.3s ease 0s;
+  }
+}

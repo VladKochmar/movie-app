@@ -1,0 +1,6 @@
+<div class="filter">
+  @if(genres && sortProps) {
+  <p-dropdown [options]="genres" [(ngModel)]="currentGenre" optionLabel="name" [showClear]="true" placeholder="Select a Genre" styleClass="filter__select" (onChange)="onGenreChange()" />
+  <p-dropdown [options]="sortProps" [(ngModel)]="currentSortType" optionLabel="name" [showClear]="true" placeholder="Sort by" styleClass="filter__select" (onChange)="onSortTypeChange()" />
+  }
+</div>

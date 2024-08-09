@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { MovieState } from '../store/state';
 import {
   loadFavorites,
+  loadGenres,
   loadMoviesByCategory,
   loadWatchLater,
 } from '../store/actions';
@@ -18,6 +19,7 @@ export class MoviesResolver implements Resolve<boolean> {
     const category = route.paramMap.get('category');
 
     if (category) {
+      this.store.dispatch(loadGenres());
       this.store.dispatch(loadMoviesByCategory({ category }));
       this.store.dispatch(loadFavorites());
       this.store.dispatch(loadWatchLater());

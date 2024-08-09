@@ -25,10 +25,9 @@ export class MoviesEffects {
     this.actions$.pipe(
       ofType(MoviesActions.loadMoviesByCategory),
       mergeMap(({ category }) => {
-        return this.movieService.getMoviesByCategory(category).pipe(
+        return this.movieService.loadFilteredMovies(category).pipe(
           map((movies) => {
-            const moviesList = movies.results;
-            return MoviesActions.loadMoviesSuccess({ movies: moviesList });
+            return MoviesActions.loadMoviesSuccess({ movies });
           }),
           catchError((error) => of(MoviesActions.loadMoviesFailure({ error })))
         );
@@ -182,5 +181,21 @@ export class MoviesEffects {
         )
       ),
     { dispatch: false }
+  );
+
+  // Genres
+  loadGenres$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.loadGenres),
+      switchMap(() => {
+        return this.movieService.loadMoviesGenres().pipe(
+          map((result) => {
+            const genres = result.genres;
+            return MoviesActions.loadGenresSuccess({ genres });
+          }),
+          catchError((error) => of(MoviesActions.loadGenresFailure({ error })))
+        );
+      })
+    )
   );
 }

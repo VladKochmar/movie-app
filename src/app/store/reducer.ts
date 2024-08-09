@@ -90,5 +90,35 @@ export const MoviesReducer = createReducer(
       ...state,
       subscriber: subscriber,
     };
+  }),
+
+  // Genres
+  on(MoviesActions.loadGenresSuccess, (state, { genres }) => {
+    return {
+      ...state,
+      genres: genres,
+    };
+  }),
+
+  on(MoviesActions.loadGenresFailure, (state, { error }) => {
+    return {
+      ...state,
+      genres: null,
+      error: error,
+    };
+  }),
+
+  on(MoviesActions.setSelectedGenre, (state, { genre }) => {
+    return {
+      ...state,
+      selectedGenre: genre,
+    };
+  }),
+
+  on(MoviesActions.setSelectedSortType, (state, { sortType }) => {
+    return {
+      ...state,
+      selectedSortType: sortType,
+    };
   })
 );

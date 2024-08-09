@@ -1,6 +1,7 @@
 <div class="page">
   <div class="page__container">
     <h1 class="page__title title">{{ title }}</h1>
+    <app-filters></app-filters>
     @if (movies) {
     <app-movies-list [movies]="movies"></app-movies-list>
     }

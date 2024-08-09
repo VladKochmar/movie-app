@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  NgZone,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -18,7 +13,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
 import { Genre } from '../../models/genre.model';
-import { genres } from '../../../data/mock-data';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MovieState } from '../../store/state';
@@ -30,7 +24,7 @@ import {
 } from '../../store/actions';
 import { SubscriberData } from '../../models/subscriber.model';
 import { takeUntil } from 'rxjs';
-import { selectSubscriber } from '../../store/selectors';
+import { selectGenres, selectSubscriber } from '../../store/selectors';
 import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
 
 @Component({
@@ -63,12 +57,14 @@ export class NewsSubscriptionComponent
   }
 
   form!: FormGroup;
-  genres: Genre[] = [];
   maxDate: Date | null = null;
   emailRequiredError: string | null = null;
 
   selectedSubscriber$ = this.store.select(selectSubscriber);
   subscriber: SubscriberData | null = null;
+
+  selectedGenres$ = this.store.select(selectGenres);
+  genres: Genre[] | null = null;
 
   ngOnInit(): void {
     this.selectedSubscriber$
@@ -76,6 +72,10 @@ export class NewsSubscriptionComponent
       .subscribe((response) => {
         this.subscriber = response;
       });
+
+    this.selectedGenres$.pipe(takeUntil(this.destroy$)).subscribe((respone) => {
+      this.genres = respone;
+    });
 
     if (!this.subscriber) this.initForm();
   }
@@ -92,7 +92,6 @@ export class NewsSubscriptionComponent
       agreement: new FormControl<boolean>(false, Validators.requiredTrue),
     });
 
-    this.genres = genres;
     this.maxDate = new Date();
   }
 

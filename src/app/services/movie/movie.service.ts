@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable, withLatestFrom } from 'rxjs';
 import type { MovieApi } from '../../models/movie-api.model';
 import type { Movie } from '../../models/movie.model';
 import { environment } from '../../../environments/environment.development';
+import { GenresApi } from '../../models/genres-api.model';
+import { Genre } from '../../models/genre.model';
+import { Store } from '@ngrx/store';
+import { selectGenre } from '../../store/selectors';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +16,7 @@ export class MovieService {
   private accountId: number | null = null;
   private sessionId: number | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private store: Store) {}
 
   // Ids
   setSessionId(id: number) {
@@ -34,6 +38,19 @@ export class MovieService {
   getMoviesByCategory(category: string): Observable<MovieApi> {
     return this.http.get<MovieApi>(
       `${environment.API_URL}/movie/${category}?api_key=${environment.API_KEY}`
+    );
+  }
+
+  loadFilteredMovies(category: string): Observable<Movie[]> {
+    return this.getMoviesByCategory(category).pipe(
+      withLatestFrom(this.store.select(selectGenre)),
+      map(([movies, selectedGenre]) => {
+        return movies.results.filter((movie) => {
+          if (movie.genre_ids && selectedGenre?.id)
+            return movie.genre_ids.includes(selectedGenre.id);
+          return true;
+        });
+      })
     );
   }
 
@@ -115,6 +132,13 @@ export class MovieService {
       `${environment.API_URL}/account/${this.accountId}/favorite?api_key=${environment.API_KEY}&session_id=${this.sessionId}`,
       body,
       { headers }
+    );
+  }
+
+  // Genres
+  loadMoviesGenres(): Observable<GenresApi> {
+    return this.http.get<GenresApi>(
+      `${environment.API_URL}/genre/movie/list?api_key=${environment.API_KEY}&language=en`
     );
   }
 }

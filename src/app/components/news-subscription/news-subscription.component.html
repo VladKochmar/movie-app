@@ -31,12 +31,14 @@
         <div class="error-label">Date is required</div>
         }
       </div>
+      @if(genres) {
       <div class="form-news__item">
         <p-multiSelect [options]="genres" formControlName="selectedGenres" optionLabel="name" placeholder="Select Genres" styleClass="item-form-news" />
         @if(form.get('selectedGenres')?.invalid && form.get('selectedGenres')?.touched){
         <div class="error-label">You have to choose your favorite genres</div>
         }
       </div>
+      }
       <div class="form-news__item form-news__item_center">
         <p-checkbox formControlName="agreement" [binary]="true" inputId="agreement" />
         <label for="agreement" class="form-news__checkbox-label">I agree with the rules</label>

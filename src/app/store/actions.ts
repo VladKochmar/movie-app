@@ -2,6 +2,8 @@ import { createAction, props } from '@ngrx/store';
 import { Movie } from '../models/movie.model';
 import { SubscriberData } from '../models/subscriber.model';
 import { TitleItem } from '../models/title-item.model';
+import { Genre } from '../models/genre.model';
+import { SortType } from '../models/sort-type.model';
 
 // Movies
 export const loadMoviesByCategory = createAction(
@@ -120,4 +122,27 @@ export const setSubscriberToLocalStorage = createAction(
 
 export const removeSubsciption = createAction(
   '[News Subscription] Remove Subsciption'
+);
+
+// Genres
+export const loadGenres = createAction('[Genres] Load Genres');
+
+export const loadGenresSuccess = createAction(
+  '[Genres] Load Genres Success',
+  props<{ genres: Genre[] | null }>()
+);
+
+export const loadGenresFailure = createAction(
+  '[Genres] Load Genres Failure',
+  props<{ error: any }>()
+);
+
+export const setSelectedGenre = createAction(
+  '[Genre] Set Selected Genres',
+  props<{ genre: Genre | null }>()
+);
+
+export const setSelectedSortType = createAction(
+  '[Sort] Set Selected SortType',
+  props<{ sortType: SortType | null }>()
 );

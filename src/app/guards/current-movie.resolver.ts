@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import {
   getSubscriber,
   loadFavorites,
+  loadGenres,
   loadMovieById,
   loadWatchLater,
 } from '../store/actions';
@@ -20,6 +21,7 @@ export class CurrentMovieResolver implements Resolve<boolean> {
 
     if (currentId) {
       this.store.dispatch(getSubscriber());
+      this.store.dispatch(loadGenres());
       this.store.dispatch(loadMovieById({ id: parseInt(currentId) }));
       this.store.dispatch(loadFavorites());
       this.store.dispatch(loadWatchLater());
