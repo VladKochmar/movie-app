@@ -13,14 +13,16 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { MoviesReducer } from './store/reducer';
 import { MoviesEffects } from './store/effects';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    importProvidersFrom(BrowserAnimationsModule),
+    importProvidersFrom(DynamicDialogModule, BrowserAnimationsModule),
     provideHttpClient(),
     provideStore({ movieState: MoviesReducer }),
     provideEffects([MoviesEffects]),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    DialogService,
   ],
 };

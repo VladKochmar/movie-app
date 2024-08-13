@@ -60,6 +60,15 @@ export const selectSubscriber = createSelector(selectMovieState, (state) => {
   return state.subscriber;
 });
 
+// Login
+export const selectUserData = createSelector(selectMovieState, (state) => {
+  return state.userData;
+});
+
+export const selectAccountId = createSelector(selectMovieState, (state) => {
+  return state.accountId;
+});
+
 // Genres
 export const selectGenres = createSelector(selectMovieState, (state) => {
   return state.genres;

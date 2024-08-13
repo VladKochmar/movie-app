@@ -4,6 +4,7 @@ import { SubscriberData } from '../models/subscriber.model';
 import { TitleItem } from '../models/title-item.model';
 import { Genre } from '../models/genre.model';
 import { SortType } from '../models/sort-type.model';
+import { AccountTMDB } from '../models/tmdb-account.model';
 
 // Movies
 export const loadMoviesByCategory = createAction(
@@ -128,6 +129,36 @@ export const setSubscriberToLocalStorage = createAction(
 export const removeSubsciption = createAction(
   '[News Subscription] Remove Subsciption'
 );
+
+// Login
+export const getUserData = createAction('[User Data] Get User Data');
+
+export const getUserDataSuccess = createAction(
+  '[User Data] Get User Data Success',
+  props<{ userData: AccountTMDB | null }>()
+);
+
+export const setUserDataToLocalStorage = createAction(
+  '[User Data] Set User Data To LocalStorage',
+  props<{ userData: AccountTMDB }>()
+);
+
+export const authenticateUser = createAction(
+  '[Auth] Authenticate And Get Account Id',
+  props<{ username: string; password: string }>()
+);
+
+export const authenticateUserSuccess = createAction(
+  '[Auth] Authenticate User Success',
+  props<{ accountId: number }>()
+);
+
+export const authenticateUserFailure = createAction(
+  '[Auth] Authenticate User Failure',
+  props<{ error: any }>()
+);
+
+export const removeUser = createAction('[User Data] Remove User');
 
 // Genres
 export const loadGenres = createAction('[Genres] Load Genres');

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { map, Observable, withLatestFrom } from 'rxjs';
-import type { MovieApi } from '../../models/movie-api.model';
-import type { Movie } from '../../models/movie.model';
+import { MovieApi } from '../../models/movie-api.model';
+import { Movie } from '../../models/movie.model';
 import { environment } from '../../../environments/environment.development';
 import { GenresApi } from '../../models/genres-api.model';
-import { Genre } from '../../models/genre.model';
 import { Store } from '@ngrx/store';
 import { selectGenre } from '../../store/selectors';
 

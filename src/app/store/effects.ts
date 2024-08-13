@@ -12,13 +12,15 @@ import {
   tap,
 } from 'rxjs';
 import { NewsSubscriptionService } from '../services/news-subscription/news-subscription.service';
+import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
 export class MoviesEffects {
   constructor(
     private actions$: Actions,
     private movieService: MovieService,
-    private newsSubscriptionService: NewsSubscriptionService
+    private newsSubscriptionService: NewsSubscriptionService,
+    private authService: AuthService
   ) {}
 
   loadFilteredMovies$ = createEffect(() =>
@@ -179,6 +181,55 @@ export class MoviesEffects {
         tap(() =>
           this.newsSubscriptionService.removeSubsciptionFromLocalStorage()
         )
+      ),
+    { dispatch: false }
+  );
+
+  // Login
+  getUserData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.getUserData),
+      map(() => {
+        const userData = this.authService.getUserData();
+        return MoviesActions.getUserDataSuccess({ userData });
+      })
+    )
+  );
+
+  addUserData$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(MoviesActions.setUserDataToLocalStorage),
+        tap((action) =>
+          this.authService.addUserDataToLocalStorage(action.userData)
+        )
+      ),
+    { dispatch: false }
+  );
+
+  authenticateUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.authenticateUser),
+      mergeMap((action) =>
+        this.authService
+          .authenticateAndGetAccountId(action.username, action.password)
+          .pipe(
+            map((accountId) =>
+              MoviesActions.authenticateUserSuccess({ accountId })
+            ),
+            catchError((error) =>
+              of(MoviesActions.authenticateUserFailure({ error }))
+            )
+          )
+      )
+    )
+  );
+
+  removeUser$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(MoviesActions.removeUser),
+        tap(() => this.authService.removeUserFromLocalStorage())
       ),
     { dispatch: false }
   );

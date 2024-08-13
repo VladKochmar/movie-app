@@ -92,6 +92,27 @@ export const MoviesReducer = createReducer(
     };
   }),
 
+  // Login
+  on(MoviesActions.getUserDataSuccess, (state, { userData }) => {
+    return {
+      ...state,
+      userData: userData,
+    };
+  }),
+
+  on(MoviesActions.authenticateUserSuccess, (state, { accountId }) => {
+    return {
+      ...state,
+      accountId,
+    };
+  }),
+
+  on(MoviesActions.authenticateUserFailure, (state, { error }) => ({
+    ...state,
+    error,
+    accountId: null,
+  })),
+
   // Genres
   on(MoviesActions.loadGenresSuccess, (state, { genres }) => {
     return {

@@ -31,3 +31,14 @@
     transition: transform 0.3s ease 0s;
   }
 }
+
+.login-popup__password {
+  width: 100%;
+  input {
+    width: 100%;
+  }
+}
+
+.login-popup__button {
+  width: 100%;
+}

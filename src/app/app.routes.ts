@@ -9,6 +9,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { FavoritesResolver } from './guards/favorites.resolver';
 import { WatchLaterResolver } from './guards/watch-later.resolver';
 import { HomeResolver } from './guards/home.resolver';
+import { AuthGuard } from './guards/auth-guard.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, resolve: { home: HomeResolver } },
@@ -20,11 +21,13 @@ export const routes: Routes = [
   {
     path: 'favorites',
     component: FavoritesComponent,
+    canActivate: [AuthGuard],
     resolve: { favorites: FavoritesResolver },
   },
   {
     path: 'watch-later',
     component: WatchLaterComponent,
+    canActivate: [AuthGuard],
     resolve: { watchLater: WatchLaterResolver },
   },
   {

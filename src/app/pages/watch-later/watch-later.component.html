@@ -1,7 +1,7 @@
 <div class="page">
   <div class="page__container">
     <h1 class="page__title title">Watch Later Movies</h1>
-    @if(watchLaterMovies) {
+    @if(watchLaterMovies && watchLaterMovies.length) {
     <app-movies-list [movies]="watchLaterMovies"></app-movies-list>
     } @else {
     <p class="empty-title">Currently, it is empty</p>

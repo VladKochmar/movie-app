@@ -4,14 +4,12 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { MovieService } from '../movie/movie.service';
 import { environment } from '../../../environments/environment.development';
+import { AccountTMDB } from '../../models/tmdb-account.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private username = environment.USERNAME;
-  private password = environment.PASSWORD;
-
   constructor(private http: HttpClient, private movieService: MovieService) {}
 
   // Get the request token
@@ -24,11 +22,15 @@ export class AuthService {
   }
 
   // Validate the request token with the user's credentials
-  private validateRequestToken(requestToken: string): Observable<void> {
+  private validateRequestToken(
+    requestToken: string,
+    username: string,
+    password: string
+  ): Observable<void> {
     const url = `${environment.API_URL}/authentication/token/validate_with_login?api_key=${environment.API_KEY}`;
     const body = {
-      username: this.username,
-      password: this.password,
+      username,
+      password,
       request_token: requestToken,
     };
     return this.http.post<any>(url, body).pipe(
@@ -60,10 +62,13 @@ export class AuthService {
   }
 
   // Public method to get accountId
-  public authenticateAndGetAccountId(): Observable<number> {
+  public authenticateAndGetAccountId(
+    username: string,
+    password: string
+  ): Observable<number> {
     return this.getRequestToken().pipe(
       switchMap((requestToken) =>
-        this.validateRequestToken(requestToken).pipe(
+        this.validateRequestToken(requestToken, username, password).pipe(
           switchMap(() => this.createSession(requestToken)),
           switchMap((sessionId) => this.getAccountId(sessionId))
         )
@@ -74,5 +79,25 @@ export class AuthService {
   private handleError(error: any) {
     console.error('An error occurred:', error);
     return throwError(error);
+  }
+
+  // Public method to get User Account Data
+  public getUserData(): AccountTMDB | null {
+    const userData = localStorage.getItem('authUser');
+
+    if (userData) return JSON.parse(userData);
+
+    return null;
+  }
+
+  // Public method to add User Account Data to LocalStorage
+  public addUserDataToLocalStorage(userData: AccountTMDB) {
+    if (!localStorage.getItem('authUser'))
+      localStorage.setItem('authUser', JSON.stringify(userData));
+  }
+
+  // Public method to remove User Account Data from LocalStorage
+  public removeUserFromLocalStorage() {
+    if (localStorage.getItem('authUser')) localStorage.removeItem('authUser');
   }
 }

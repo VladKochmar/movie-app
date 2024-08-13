@@ -4,6 +4,7 @@ import { MovieState } from '../store/state';
 import { Store } from '@ngrx/store';
 import {
   getSubscriber,
+  getUserData,
   loadFavorites,
   loadGenres,
   loadMovieById,
@@ -20,6 +21,7 @@ export class CurrentMovieResolver implements Resolve<boolean> {
     const currentId = route.paramMap.get('id');
 
     if (currentId) {
+      this.store.dispatch(getUserData());
       this.store.dispatch(getSubscriber());
       this.store.dispatch(loadGenres());
       this.store.dispatch(loadMovieById({ id: parseInt(currentId) }));

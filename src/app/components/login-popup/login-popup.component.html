@@ -1,0 +1,14 @@
+<div class="login-popup">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-popup__form">
+    <div class="login-popup__inp">
+      <input pInputText formControlName="name" placeholder="Name" />
+    </div>
+    <div class="login-popup__inp">
+      <p-password [toggleMask]="true" [feedback]="false" formControlName="password" placeholder="Password" styleClass="login-popup__password" />
+    </div>
+    <p-button type="submit" label="Submit" styleClass="login-popup__button" />
+  </form>
+  <div class="login-popup__text">
+    Register with <a href="https://www.themoviedb.org/signup">TMDB</a> if you don't already have an account
+  </div>
+</div>

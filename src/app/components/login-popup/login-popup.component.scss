@@ -1,0 +1,27 @@
+.login-popup {
+  // .login-popup__form
+  &__form {
+    &:not(:last-child) {
+      margin-bottom: 0.75rem;
+    }
+  }
+  // .login-popup__inp
+  &__inp {
+    input {
+      width: 100%;
+    }
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+  }
+  // .login-popup__text
+  &__text {
+    color: #9c9c9c;
+    font-size: 0.75rem;
+    text-align: center;
+    a {
+      font-weight: 700;
+      text-decoration: underline;
+    }
+  }
+}
