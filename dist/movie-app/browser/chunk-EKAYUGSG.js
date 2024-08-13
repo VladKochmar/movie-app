@@ -1,0 +1,1 @@
+import{S as n}from"./chunk-KIWVUDLE.js";var o=(()=>{let t=class t{transform(e,i){return e||i}};t.\u0275fac=function(i){return new(i||t)},t.\u0275pipe=n({name:"defaultImage",type:t,pure:!0,standalone:!0});let r=t;return r})();export{o as a};
