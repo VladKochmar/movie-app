@@ -11,6 +11,7 @@ import { DefaultImagePipe } from '../../pipes/default-image/default-image.pipe';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RouterTestingModule } from '@angular/router/testing';
+import { DialogService } from 'primeng/dynamicdialog';
 
 describe('MovieCardComponent', () => {
   let component: MovieCardComponent;
@@ -41,6 +42,7 @@ describe('MovieCardComponent', () => {
       providers: [
         { provide: MovieService, useValue: movieServiceMock },
         { provide: Store, useValue: storeMock },
+        DialogService,
       ],
     }).compileComponents();
 

@@ -1,12 +1,14 @@
 import { popularMovies } from '../../data/mock-data';
 import { SortType } from '../models/sort-type.model';
 import {
+  selectAccountId,
   selectCurrentMovie,
   selectFavorites,
   selectMovies,
   selectSearchedMoviesTitles,
   selectSortedMovies,
   selectSubscriber,
+  selectUserData,
   selectWatchLater,
 } from './selectors';
 import { initialState } from './state';
@@ -30,6 +32,8 @@ describe('Selectors', () => {
     favoriteMovies: popularMovies,
     watchLaterMovies: popularMovies,
     subscriber: subscriberData,
+    userData: null,
+    accountId: null,
     searchedMoviesTitles: null,
   };
 
@@ -58,6 +62,18 @@ describe('Selectors', () => {
   it('should select the subscriber from the state', () => {
     expect(selectSubscriber.projector(initialState)).toEqual(
       initialState.subscriber
+    );
+  });
+
+  it('should return user data from the state', () => {
+    expect(selectUserData.projector(initialState)).toEqual(
+      initialState.userData
+    );
+  });
+
+  it('should select accountId from the state', () => {
+    expect(selectAccountId.projector(initialState)).toEqual(
+      initialState.accountId
     );
   });
 

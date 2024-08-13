@@ -8,13 +8,30 @@ import { Movie } from '../models/movie.model';
 import { popularMovies } from '../../data/mock-data';
 import * as MoviesActions from './actions';
 import { MovieApi } from '../models/movie-api.model';
+import { NewsSubscriptionService } from '../services/news-subscription/news-subscription.service';
+import { AuthService } from '../services/auth/auth.service';
 
 describe('MoviesEffects', () => {
   let effects: MoviesEffects;
   let actions$: ReplaySubject<any>;
   let movieService: MovieService;
+  let newsSubscriptionServiceMock: any;
+  let authServiceMock: any;
 
   beforeEach(() => {
+    newsSubscriptionServiceMock = {
+      getSubscriber: jest.fn(),
+      addSubscriptionToLocalSotrage: jest.fn(),
+      removeSubsciptionFromLocalStorage: jest.fn(),
+    };
+
+    authServiceMock = {
+      getUserData: jest.fn(),
+      addUserDataToLocalStorage: jest.fn(),
+      authenticateAndGetAccountId: jest.fn(),
+      removeUserFromLocalStorage: jest.fn(),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         MoviesEffects,
@@ -26,6 +43,11 @@ describe('MoviesEffects', () => {
             getMovieList: jest.fn(),
           },
         },
+        {
+          provide: NewsSubscriptionService,
+          useValue: newsSubscriptionServiceMock,
+        },
+        { provide: AuthService, useValue: authServiceMock },
       ],
     });
 
