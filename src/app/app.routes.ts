@@ -31,7 +31,7 @@ export const routes: Routes = [
     resolve: { watchLater: WatchLaterResolver },
   },
   {
-    path: 'movies/:category',
+    path: 'movies/:category/:page',
     component: MoviesByCategoryComponent,
     resolve: { movies: MoviesResolver },
   },

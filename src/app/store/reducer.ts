@@ -6,10 +6,11 @@ export const MoviesReducer = createReducer(
   initialState,
 
   // Movies
-  on(MoviesActions.loadMoviesSuccess, (state, { movies }) => {
+  on(MoviesActions.loadMoviesSuccess, (state, { movies, totalMovies }) => {
     return {
       ...state,
       movies: movies,
+      totalMovies: totalMovies,
     };
   }),
 
@@ -17,6 +18,7 @@ export const MoviesReducer = createReducer(
     return {
       ...state,
       movies: null,
+      totalMovies: null,
       error: error,
     };
   }),

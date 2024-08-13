@@ -11,6 +11,7 @@ export interface MovieState {
   selectedGenre: Genre | null;
   selectedSortType: SortType | null;
   movies: Movie[] | null;
+  totalMovies: number | null;
   favoriteMovies: Movie[] | null;
   watchLaterMovies: Movie[] | null;
   subscriber: SubscriberData | null;
@@ -25,6 +26,7 @@ export const initialState: MovieState = {
   selectedGenre: null,
   selectedSortType: null,
   movies: null,
+  totalMovies: null,
   favoriteMovies: null,
   watchLaterMovies: null,
   subscriber: null,

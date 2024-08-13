@@ -4,6 +4,7 @@
     <app-filters></app-filters>
     @if (movies) {
     <app-movies-list [movies]="movies"></app-movies-list>
+    <div class="pagination"><p-paginator [rows]="20" [totalRecords]="totalRecords" [showFirstLastIcon]="false" (onPageChange)="onPageChange($event)" /></div>
     }
   </div>
 </div>

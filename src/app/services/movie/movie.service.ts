@@ -34,21 +34,30 @@ export class MovieService {
     return this.accountId;
   }
 
-  getMoviesByCategory(category: string): Observable<MovieApi> {
-    return this.http.get<MovieApi>(
-      `${environment.API_URL}/movie/${category}?api_key=${environment.API_KEY}`
-    );
+  getMoviesByCategory(
+    category: string,
+    page: number | string | null
+  ): Observable<MovieApi> {
+    let url = `${environment.API_URL}/movie/${category}?api_key=${environment.API_KEY}`;
+
+    if (page) url += `&page=${page}`;
+
+    return this.http.get<MovieApi>(url);
   }
 
-  loadFilteredMovies(category: string): Observable<Movie[]> {
-    return this.getMoviesByCategory(category).pipe(
+  loadFilteredMovies(
+    category: string,
+    page: number | string | null
+  ): Observable<{ movies: Movie[]; totalMovies: number }> {
+    return this.getMoviesByCategory(category, page).pipe(
       withLatestFrom(this.store.select(selectGenre)),
-      map(([movies, selectedGenre]) => {
-        return movies.results.filter((movie) => {
+      map(([moviesApi, selectedGenre]) => {
+        const filteredMovies = moviesApi.results.filter((movie) => {
           if (movie.genre_ids && selectedGenre?.id)
             return movie.genre_ids.includes(selectedGenre.id);
           return true;
         });
+        return { movies: filteredMovies, totalMovies: moviesApi.total_results };
       })
     );
   }

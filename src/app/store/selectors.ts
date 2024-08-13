@@ -20,6 +20,10 @@ export const selectCurrentMovie = createSelector(selectMovieState, (state) => {
   return state.currentMovie;
 });
 
+export const selectTotalMovies = createSelector(selectMovieState, (state) => {
+  return state.totalMovies;
+});
+
 // Favorites
 export const selectFavorites = createSelector(selectMovieState, (state) => {
   return state.favoriteMovies;

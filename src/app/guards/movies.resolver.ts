@@ -21,11 +21,12 @@ export class MoviesResolver implements Resolve<boolean> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<boolean> {
     const category = route.paramMap.get('category');
+    const page = route.paramMap.get('page') ? route.paramMap.get('page') : 1;
 
     if (category) {
       this.store.dispatch(getUserData());
       this.store.dispatch(loadGenres());
-      this.store.dispatch(loadFilteredMovies({ category }));
+      this.store.dispatch(loadFilteredMovies({ category, page }));
 
       return this.store.select(selectUserData).pipe(
         take(1),

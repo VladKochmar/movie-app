@@ -31,6 +31,7 @@ export class FiltersComponent extends ClearObservable implements OnInit {
   }
 
   private category: string | null = null;
+  private page: string | number | null = null;
 
   sortProps: SortType[] | null = null;
 
@@ -46,6 +47,7 @@ export class FiltersComponent extends ClearObservable implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.category = params.get('category');
+      this.page = params.get('page');
     });
 
     this.selectedGenres$.pipe(takeUntil(this.destroy$)).subscribe((result) => {
@@ -71,7 +73,9 @@ export class FiltersComponent extends ClearObservable implements OnInit {
   onGenreChange() {
     this.store.dispatch(setSelectedGenre({ genre: this.currentGenre }));
     if (this.category)
-      this.store.dispatch(loadFilteredMovies({ category: this.category }));
+      this.store.dispatch(
+        loadFilteredMovies({ category: this.category, page: this.page })
+      );
   }
 
   onSortTypeChange() {

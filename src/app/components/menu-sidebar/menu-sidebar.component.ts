@@ -38,22 +38,22 @@ export class MenuSidebarComponent implements OnInit {
           {
             label: 'Top Rated',
             icon: 'pi pi-star',
-            route: 'movies/top_rated',
+            route: 'movies/top_rated/1',
           },
           {
             label: 'Popular',
             icon: 'pi pi-trophy',
-            route: 'movies/popular',
+            route: 'movies/popular/1',
           },
           {
             label: 'Now Playing',
             icon: 'pi pi-play-circle',
-            route: 'movies/now_playing',
+            route: 'movies/now_playing/1',
           },
           {
             label: 'Upcoming',
             icon: 'pi pi-sparkles',
-            route: 'movies/upcoming',
+            route: 'movies/upcoming/1',
           },
         ],
       },

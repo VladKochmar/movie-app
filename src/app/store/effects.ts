@@ -26,10 +26,10 @@ export class MoviesEffects {
   loadFilteredMovies$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadFilteredMovies),
-      mergeMap(({ category }) => {
-        return this.movieService.loadFilteredMovies(category).pipe(
-          map((movies) => {
-            return MoviesActions.loadMoviesSuccess({ movies });
+      mergeMap(({ category, page }) => {
+        return this.movieService.loadFilteredMovies(category, page).pipe(
+          map(({ movies, totalMovies }) => {
+            return MoviesActions.loadMoviesSuccess({ movies, totalMovies });
           }),
           catchError((error) => of(MoviesActions.loadMoviesFailure({ error })))
         );
