@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -37,6 +37,7 @@ import {
   providers: [DialogService],
   templateUrl: './login-popup.component.html',
   styleUrl: './login-popup.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPopupComponent implements OnInit {
   constructor(private store: Store, private ref: DynamicDialogRef) {}

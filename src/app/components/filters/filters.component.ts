@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
@@ -24,6 +24,7 @@ import { ActivatedRoute } from '@angular/router';
   imports: [FormsModule, DropdownModule],
   templateUrl: './filters.component.html',
   styleUrl: './filters.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FiltersComponent extends ClearObservable implements OnInit {
   constructor(private store: Store, private route: ActivatedRoute) {

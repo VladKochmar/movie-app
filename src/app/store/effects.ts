@@ -4,9 +4,9 @@ import { MovieService } from '../services/movie/movie.service';
 import * as MoviesActions from './actions';
 import {
   catchError,
+  concatMap,
   debounceTime,
   map,
-  mergeMap,
   of,
   switchMap,
   tap,
@@ -26,7 +26,7 @@ export class MoviesEffects {
   loadFilteredMovies$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadFilteredMovies),
-      mergeMap(({ category, page }) => {
+      switchMap(({ category, page }) => {
         return this.movieService.loadFilteredMovies(category, page).pipe(
           map(({ movies, totalMovies }) => {
             return MoviesActions.loadMoviesSuccess({ movies, totalMovies });
@@ -41,7 +41,7 @@ export class MoviesEffects {
     this.actions$.pipe(
       ofType(MoviesActions.loadMoviesByTitle),
       debounceTime(300),
-      mergeMap(({ title }) => {
+      switchMap(({ title }) => {
         return this.movieService.loadMoviesByTitle(title).pipe(
           map((movies) => {
             const titlesList = movies.results.map((movie) => ({
@@ -63,7 +63,7 @@ export class MoviesEffects {
   loadMovieById$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadMovieById),
-      mergeMap(({ id }) => {
+      switchMap(({ id }) => {
         return this.movieService.loadMovieById(id).pipe(
           map((movie) => MoviesActions.loadMovieSuccess({ movie })),
           catchError((error) => of(MoviesActions.loadMovieFailure({ error })))
@@ -75,7 +75,7 @@ export class MoviesEffects {
   loadFavorites$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadFavorites),
-      mergeMap(() => {
+      switchMap(() => {
         return this.movieService.loadFavorites().pipe(
           map((movies) => {
             const favorites = movies.results;
@@ -92,16 +92,17 @@ export class MoviesEffects {
   toggleMovieToFavorite$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.toggleMovieToFavorite),
-      mergeMap(({ movieId, isFavorite }) => {
+      switchMap(({ movieId, isFavorite }) => {
         return this.movieService
           .toggleMovieToFavorites(movieId, isFavorite)
           .pipe(
-            map((respone) =>
+            concatMap((respone) => [
               MoviesActions.toggleMovieToFavoriteSuccess({
                 status_code: respone.status_code,
                 status_message: respone.status_message,
-              })
-            ),
+              }),
+              MoviesActions.loadFavorites(),
+            ]),
             catchError((error) =>
               of(MoviesActions.toggleMovieToFavoriteFailure({ error }))
             )
@@ -113,7 +114,7 @@ export class MoviesEffects {
   loadWatchLater$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadWatchLater),
-      mergeMap(() => {
+      switchMap(() => {
         return this.movieService.loadWatchLater().pipe(
           map((movies) => {
             const watchLater = movies.results;
@@ -130,16 +131,17 @@ export class MoviesEffects {
   toggleMovieToWatchLater$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.toggleMovieToWatchLater),
-      mergeMap(({ movieId, isWatchLater }) => {
+      switchMap(({ movieId, isWatchLater }) => {
         return this.movieService
           .toggleMovieToWatchLater(movieId, isWatchLater)
           .pipe(
-            map((respone) =>
+            concatMap((respone) => [
               MoviesActions.toggleMovieToWatchLaterSuccess({
                 status_code: respone.status_code,
                 status_message: respone.status_message,
-              })
-            ),
+              }),
+              MoviesActions.loadWatchLater(),
+            ]),
             catchError((error) =>
               of(MoviesActions.toggleMovieToWatchLaterFailure({ error }))
             )
@@ -210,7 +212,7 @@ export class MoviesEffects {
   authenticateUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.authenticateUser),
-      mergeMap((action) =>
+      switchMap((action) =>
         this.authService
           .authenticateAndGetAccountId(action.username, action.password)
           .pipe(

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -44,6 +44,7 @@ import { ClearObservable } from '../../directives/clear-observable/clear-observa
   providers: [MessageService],
   templateUrl: './news-subscription.component.html',
   styleUrl: './news-subscription.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsSubscriptionComponent
   extends ClearObservable
