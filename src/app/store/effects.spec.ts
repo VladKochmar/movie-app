@@ -1,4 +1,4 @@
-import { of, ReplaySubject, throwError } from 'rxjs';
+import { of, ReplaySubject } from 'rxjs';
 import { MoviesEffects } from './effects';
 import { MovieService } from '../services/movie/movie.service';
 import { TestBed } from '@angular/core/testing';
@@ -8,13 +8,30 @@ import { Movie } from '../models/movie.model';
 import { popularMovies } from '../../data/mock-data';
 import * as MoviesActions from './actions';
 import { MovieApi } from '../models/movie-api.model';
+import { NewsSubscriptionService } from '../services/news-subscription/news-subscription.service';
+import { AuthService } from '../services/auth/auth.service';
 
 describe('MoviesEffects', () => {
   let effects: MoviesEffects;
   let actions$: ReplaySubject<any>;
   let movieService: MovieService;
+  let newsSubscriptionServiceMock: any;
+  let authServiceMock: any;
 
   beforeEach(() => {
+    newsSubscriptionServiceMock = {
+      getSubscriber: jest.fn(),
+      addSubscriptionToLocalSotrage: jest.fn(),
+      removeSubsciptionFromLocalStorage: jest.fn(),
+    };
+
+    authServiceMock = {
+      getUserData: jest.fn(),
+      addUserDataToLocalStorage: jest.fn(),
+      authenticateAndGetAccountId: jest.fn(),
+      removeUserFromLocalStorage: jest.fn(),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         MoviesEffects,
@@ -26,6 +43,11 @@ describe('MoviesEffects', () => {
             getMovieList: jest.fn(),
           },
         },
+        {
+          provide: NewsSubscriptionService,
+          useValue: newsSubscriptionServiceMock,
+        },
+        { provide: AuthService, useValue: authServiceMock },
       ],
     });
 
@@ -40,17 +62,11 @@ describe('MoviesEffects', () => {
 
   it('should return a loadMoviesSuccess action with movies on success', (done) => {
     const mockMovies: Movie[] = popularMovies;
-    const mockMovieApi: MovieApi = {
-      total_pages: 1,
-      page: 1,
-      total_results: 1,
-      results: mockMovies,
-    };
 
-    actions$.next(MoviesActions.loadMoviesByCategory({ category: 'popular' }));
-    movieService.getMoviesByCategory = jest.fn(() => of(mockMovieApi));
+    actions$.next(MoviesActions.loadFilteredMovies({ category: 'popular' }));
+    movieService.loadFilteredMovies = jest.fn(() => of(mockMovies));
 
-    effects.loadMoviesByCategory$.subscribe((result) => {
+    effects.loadFilteredMovies$.subscribe((result) => {
       expect(result).toEqual(
         MoviesActions.loadMoviesSuccess({ movies: mockMovies })
       );
@@ -98,7 +114,7 @@ describe('MoviesEffects', () => {
     });
   });
 
-  it('should return a loadMovieByIdSuccess on success', (done) => {
+  it('should return a loadMovieSuccess on success', (done) => {
     const mockMovie: Movie = popularMovies[0];
 
     actions$.next(MoviesActions.loadMovieById({ id: 1022789 }));
@@ -106,7 +122,7 @@ describe('MoviesEffects', () => {
 
     effects.loadMovieById$.subscribe((result) => {
       expect(result).toEqual(
-        MoviesActions.loadMovieByIdSuccess({ movie: mockMovie })
+        MoviesActions.loadMovieSuccess({ movie: mockMovie })
       );
       done();
     });

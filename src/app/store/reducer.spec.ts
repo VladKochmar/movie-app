@@ -1,10 +1,11 @@
 import { popularMovies } from '../../data/mock-data';
+import { SubscriberData } from '../models/subscriber.model';
 import {
+  getSubscriberSuccess,
   loadFavoritesFailure,
   loadFavoritesSuccess,
-  loadMovieById,
-  loadMovieByIdFailure,
-  loadMovieByIdSuccess,
+  loadMovieFailure,
+  loadMovieSuccess,
   loadMoviesFailure,
   loadMoviesSuccess,
   loadWatchLaterFailure,
@@ -44,7 +45,7 @@ describe('MoviesReducer', () => {
     expect(state).toEqual(expectedState);
   });
 
-  it('should handle loadMovieByIdSuccess', () => {
+  it('should handle loadMovieSuccess', () => {
     const movie = popularMovies[0];
 
     const expectedState = {
@@ -52,11 +53,11 @@ describe('MoviesReducer', () => {
       currentMovie: movie,
     };
 
-    const state = MoviesReducer(initialState, loadMovieByIdSuccess({ movie }));
+    const state = MoviesReducer(initialState, loadMovieSuccess({ movie }));
     expect(state).toEqual(expectedState);
   });
 
-  it('should handle loadMoviesByIdFailure', () => {
+  it('should handle loadMoviesFailure', () => {
     const error = 'Some Error';
 
     const expectedState = {
@@ -65,7 +66,7 @@ describe('MoviesReducer', () => {
       currentMovie: null,
     };
 
-    const state = MoviesReducer(initialState, loadMovieByIdFailure({ error }));
+    const state = MoviesReducer(initialState, loadMovieFailure({ error }));
     expect(state).toEqual(expectedState);
   });
 
@@ -119,6 +120,28 @@ describe('MoviesReducer', () => {
     };
 
     const state = MoviesReducer(initialState, loadWatchLaterFailure({ error }));
+    expect(state).toEqual(expectedState);
+  });
+
+  it('should handle getSubscriberSuccess', () => {
+    const subscriber: SubscriberData | null = {
+      name: 'User',
+      email: 'user@gmail.com',
+      date: new Date(),
+      selectedGenres: [],
+      agreement: true,
+    };
+
+    const expectedState = {
+      ...initialState,
+      subscriber: subscriber,
+    };
+
+    const state = MoviesReducer(
+      initialState,
+      getSubscriberSuccess({ subscriber })
+    );
+
     expect(state).toEqual(expectedState);
   });
 });

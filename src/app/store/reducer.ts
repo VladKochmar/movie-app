@@ -6,10 +6,11 @@ export const MoviesReducer = createReducer(
   initialState,
 
   // Movies
-  on(MoviesActions.loadMoviesSuccess, (state, { movies }) => {
+  on(MoviesActions.loadMoviesSuccess, (state, { movies, totalMovies }) => {
     return {
       ...state,
       movies: movies,
+      totalMovies: totalMovies,
     };
   }),
 
@@ -17,19 +18,35 @@ export const MoviesReducer = createReducer(
     return {
       ...state,
       movies: null,
+      totalMovies: null,
+      error: error,
+    };
+  }),
+
+  on(MoviesActions.loadMoviesByTitleSuccess, (state, { titles }) => {
+    return {
+      ...state,
+      searchedMoviesTitles: titles,
+    };
+  }),
+
+  on(MoviesActions.loadMoviesByTitleFailure, (state, { error }) => {
+    return {
+      ...state,
+      searchedMoviesTitles: null,
       error: error,
     };
   }),
 
   // Movie
-  on(MoviesActions.loadMovieByIdSuccess, (state, { movie }) => {
+  on(MoviesActions.loadMovieSuccess, (state, { movie }) => {
     return {
       ...state,
       currentMovie: movie,
     };
   }),
 
-  on(MoviesActions.loadMovieByIdFailure, (state, { error }) => {
+  on(MoviesActions.loadMovieFailure, (state, { error }) => {
     return {
       ...state,
       currentMovie: null,
@@ -66,6 +83,65 @@ export const MoviesReducer = createReducer(
       ...state,
       watchLaterMovies: null,
       error: error,
+    };
+  }),
+
+  // News Subscription
+  on(MoviesActions.getSubscriberSuccess, (state, { subscriber }) => {
+    return {
+      ...state,
+      subscriber: subscriber,
+    };
+  }),
+
+  // Login
+  on(MoviesActions.getUserDataSuccess, (state, { userData }) => {
+    return {
+      ...state,
+      userData: userData,
+    };
+  }),
+
+  on(MoviesActions.authenticateUserSuccess, (state, { accountId }) => {
+    return {
+      ...state,
+      accountId,
+    };
+  }),
+
+  on(MoviesActions.authenticateUserFailure, (state, { error }) => ({
+    ...state,
+    error,
+    accountId: null,
+  })),
+
+  // Genres
+  on(MoviesActions.loadGenresSuccess, (state, { genres }) => {
+    return {
+      ...state,
+      genres: genres,
+    };
+  }),
+
+  on(MoviesActions.loadGenresFailure, (state, { error }) => {
+    return {
+      ...state,
+      genres: null,
+      error: error,
+    };
+  }),
+
+  on(MoviesActions.setSelectedGenre, (state, { genre }) => {
+    return {
+      ...state,
+      selectedGenre: genre,
+    };
+  }),
+
+  on(MoviesActions.setSelectedSortType, (state, { sortType }) => {
+    return {
+      ...state,
+      selectedSortType: sortType,
     };
   })
 );

@@ -11,11 +11,18 @@ import type { Movie } from '../../models/movie.model';
 import { Store } from '@ngrx/store';
 import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
 import { takeUntil } from 'rxjs';
-import { isFavorite, isWatchLater } from '../../store/selectors';
+import {
+  isFavorite,
+  isWatchLater,
+  selectUserData,
+} from '../../store/selectors';
 import {
   toggleMovieToFavorite,
   toggleMovieToWatchLater,
 } from '../../store/actions';
+import { AccountTMDB } from '../../models/tmdb-account.model';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { LoginPopupComponent } from '../login-popup/login-popup.component';
 
 @Component({
   selector: 'app-movie-card',
@@ -33,7 +40,7 @@ import {
   styleUrl: './movie-card.component.scss',
 })
 export class MovieCardComponent extends ClearObservable implements OnInit {
-  constructor(private store: Store) {
+  constructor(private store: Store, private dialogService: DialogService) {
     super();
   }
 
@@ -45,24 +52,48 @@ export class MovieCardComponent extends ClearObservable implements OnInit {
   imageSrc: string | null = null;
   defaultImageSrc: string = '../../../assets/images/movies-card/not-found.jpg';
 
+  user: AccountTMDB | null = null;
+
   toggleMovieToFavorite(movieId: number) {
-    this.isFavorite = !this.isFavorite;
-    this.store.dispatch(
-      toggleMovieToFavorite({ movieId, isFavorite: this.isFavorite })
-    );
+    if (this.user) {
+      this.isFavorite = !this.isFavorite;
+      this.store.dispatch(
+        toggleMovieToFavorite({ movieId, isFavorite: this.isFavorite })
+      );
+    } else {
+      this.initPopup();
+    }
   }
 
   toggleMovieToWatchLater(movieId: number) {
-    this.isWatchLater = !this.isWatchLater;
-    this.store.dispatch(
-      toggleMovieToWatchLater({ movieId, isWatchLater: this.isWatchLater })
-    );
+    if (this.user) {
+      this.isWatchLater = !this.isWatchLater;
+      this.store.dispatch(
+        toggleMovieToWatchLater({ movieId, isWatchLater: this.isWatchLater })
+      );
+    } else {
+      this.initPopup();
+    }
+  }
+
+  initPopup() {
+    const ref: DynamicDialogRef = this.dialogService.open(LoginPopupComponent, {
+      header: 'Log In With TMDB Account',
+      width: '25rem',
+    });
   }
 
   ngOnInit(): void {
     this.imageSrc = this.movie?.poster_path
       ? 'https:/image.tmdb.org/t/p/w500' + this.movie?.poster_path
       : null;
+
+    this.store
+      .select(selectUserData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => {
+        this.user = response;
+      });
 
     if (this.movie) {
       this.store

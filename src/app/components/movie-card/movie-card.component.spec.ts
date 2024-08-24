@@ -1,9 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { MovieCardComponent } from './movie-card.component';
-import { Movie } from '../../models/movie.model';
-import { popularMovies } from '../../../data/mock-data';
-import { selectFavorites, selectWatchLater } from '../../store/selectors';
 import { of } from 'rxjs';
 import { MovieService } from '../../services/movie/movie.service';
 import { Store } from '@ngrx/store';
@@ -14,6 +11,7 @@ import { DefaultImagePipe } from '../../pipes/default-image/default-image.pipe';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { RouterTestingModule } from '@angular/router/testing';
+import { DialogService } from 'primeng/dynamicdialog';
 
 describe('MovieCardComponent', () => {
   let component: MovieCardComponent;
@@ -44,6 +42,7 @@ describe('MovieCardComponent', () => {
       providers: [
         { provide: MovieService, useValue: movieServiceMock },
         { provide: Store, useValue: storeMock },
+        DialogService,
       ],
     }).compileComponents();
 

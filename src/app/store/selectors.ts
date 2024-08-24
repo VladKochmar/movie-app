@@ -9,8 +9,19 @@ export const selectMovies = createSelector(selectMovieState, (state) => {
   return state.movies;
 });
 
+export const selectSearchedMoviesTitles = createSelector(
+  selectMovieState,
+  (state) => {
+    return state.searchedMoviesTitles;
+  }
+);
+
 export const selectCurrentMovie = createSelector(selectMovieState, (state) => {
   return state.currentMovie;
+});
+
+export const selectTotalMovies = createSelector(selectMovieState, (state) => {
+  return state.totalMovies;
 });
 
 // Favorites
@@ -47,3 +58,51 @@ export const isWatchLater = (movie: Movie) =>
 
     return result;
   });
+
+// News Subscription
+export const selectSubscriber = createSelector(selectMovieState, (state) => {
+  return state.subscriber;
+});
+
+// Login
+export const selectUserData = createSelector(selectMovieState, (state) => {
+  return state.userData;
+});
+
+export const selectAccountId = createSelector(selectMovieState, (state) => {
+  return state.accountId;
+});
+
+// Genres
+export const selectGenres = createSelector(selectMovieState, (state) => {
+  return state.genres;
+});
+
+export const selectGenre = createSelector(selectMovieState, (state) => {
+  return state.selectedGenre;
+});
+
+export const selectSortType = createSelector(selectMovieState, (state) => {
+  return state.selectedSortType;
+});
+
+export const selectSortedMovies = createSelector(
+  selectMovies,
+  selectSortType,
+  (movies, sortType) => {
+    if (!movies) return null;
+
+    switch (sortType?.type) {
+      case 'rating-desc':
+        return movies
+          .slice()
+          .sort((movieA, movieB) => movieB.vote_average - movieA.vote_average);
+      case 'rating-asc':
+        return movies
+          .slice()
+          .sort((movieA, movieB) => movieA.vote_average - movieB.vote_average);
+      default:
+        return movies;
+    }
+  }
+);

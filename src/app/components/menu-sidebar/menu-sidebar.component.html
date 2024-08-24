@@ -8,6 +8,7 @@
         </a>
       </div>
     </ng-template>
+    <app-movie-search (closeSidebarEvent)="closeSidebar($event)"></app-movie-search>
     <p-menu [model]="items" styleClass="sidebar-menu">
       <ng-template pTemplate="item" let-item>
         <a [routerLink]="item.route" class="p-menuitem-link">

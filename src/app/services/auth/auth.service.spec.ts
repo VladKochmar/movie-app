@@ -5,6 +5,8 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
+import { of } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -12,9 +14,14 @@ describe('AuthService', () => {
   let injector: TestBed;
 
   beforeEach(() => {
+    const storeMock = {
+      select: jest.fn(() => of(null)),
+      dispatch: jest.fn(),
+    };
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AuthService],
+      providers: [AuthService, { provide: Store, useValue: storeMock }],
     });
 
     injector = getTestBed();

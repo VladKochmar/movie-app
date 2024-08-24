@@ -1,4 +1,9 @@
-import { Component, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  Output,
+} from '@angular/core';
 import { MovieCardComponent } from '../movie-card/movie-card.component';
 import { CommonModule } from '@angular/common';
 import type { Movie } from '../../models/movie.model';
@@ -9,6 +14,7 @@ import type { Movie } from '../../models/movie.model';
   imports: [CommonModule, MovieCardComponent],
   templateUrl: './movies-list.component.html',
   styleUrl: './movies-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MoviesListComponent {
   @Input() movies!: Movie[];

@@ -2,22 +2,59 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { MovieService } from '../services/movie/movie.service';
 import * as MoviesActions from './actions';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  debounceTime,
+  map,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
+import { NewsSubscriptionService } from '../services/news-subscription/news-subscription.service';
+import { AuthService } from '../services/auth/auth.service';
 
 @Injectable()
 export class MoviesEffects {
-  constructor(private actions$: Actions, private movieService: MovieService) {}
+  constructor(
+    private actions$: Actions,
+    private movieService: MovieService,
+    private newsSubscriptionService: NewsSubscriptionService,
+    private authService: AuthService
+  ) {}
 
-  loadMoviesByCategory$ = createEffect(() =>
+  loadFilteredMovies$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MoviesActions.loadMoviesByCategory),
-      mergeMap(({ category }) => {
-        return this.movieService.getMoviesByCategory(category).pipe(
-          map((movies) => {
-            const moviesList = movies.results;
-            return MoviesActions.loadMoviesSuccess({ movies: moviesList });
+      ofType(MoviesActions.loadFilteredMovies),
+      switchMap(({ category, page }) => {
+        return this.movieService.loadFilteredMovies(category, page).pipe(
+          map(({ movies, totalMovies }) => {
+            return MoviesActions.loadMoviesSuccess({ movies, totalMovies });
           }),
           catchError((error) => of(MoviesActions.loadMoviesFailure({ error })))
+        );
+      })
+    )
+  );
+
+  loadMoviesByTitle$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.loadMoviesByTitle),
+      debounceTime(300),
+      switchMap(({ title }) => {
+        return this.movieService.loadMoviesByTitle(title).pipe(
+          map((movies) => {
+            const titlesList = movies.results.map((movie) => ({
+              id: movie.id,
+              title: movie.title,
+            }));
+            return MoviesActions.loadMoviesByTitleSuccess({
+              titles: titlesList,
+            });
+          }),
+          catchError((error) =>
+            of(MoviesActions.loadMoviesByTitleFailure({ error }))
+          )
         );
       })
     )
@@ -26,12 +63,10 @@ export class MoviesEffects {
   loadMovieById$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadMovieById),
-      mergeMap(({ id }) => {
+      switchMap(({ id }) => {
         return this.movieService.loadMovieById(id).pipe(
-          map((movie) => MoviesActions.loadMovieByIdSuccess({ movie })),
-          catchError((error) =>
-            of(MoviesActions.loadMovieByIdFailure({ error }))
-          )
+          map((movie) => MoviesActions.loadMovieSuccess({ movie })),
+          catchError((error) => of(MoviesActions.loadMovieFailure({ error })))
         );
       })
     )
@@ -40,7 +75,7 @@ export class MoviesEffects {
   loadFavorites$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadFavorites),
-      mergeMap(() => {
+      switchMap(() => {
         return this.movieService.loadFavorites().pipe(
           map((movies) => {
             const favorites = movies.results;
@@ -57,16 +92,17 @@ export class MoviesEffects {
   toggleMovieToFavorite$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.toggleMovieToFavorite),
-      mergeMap(({ movieId, isFavorite }) => {
+      switchMap(({ movieId, isFavorite }) => {
         return this.movieService
           .toggleMovieToFavorites(movieId, isFavorite)
           .pipe(
-            map((respone) =>
+            concatMap((respone) => [
               MoviesActions.toggleMovieToFavoriteSuccess({
                 status_code: respone.status_code,
                 status_message: respone.status_message,
-              })
-            ),
+              }),
+              MoviesActions.loadFavorites(),
+            ]),
             catchError((error) =>
               of(MoviesActions.toggleMovieToFavoriteFailure({ error }))
             )
@@ -78,7 +114,7 @@ export class MoviesEffects {
   loadWatchLater$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadWatchLater),
-      mergeMap(() => {
+      switchMap(() => {
         return this.movieService.loadWatchLater().pipe(
           map((movies) => {
             const watchLater = movies.results;
@@ -95,20 +131,123 @@ export class MoviesEffects {
   toggleMovieToWatchLater$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.toggleMovieToWatchLater),
-      mergeMap(({ movieId, isWatchLater }) => {
+      switchMap(({ movieId, isWatchLater }) => {
         return this.movieService
           .toggleMovieToWatchLater(movieId, isWatchLater)
           .pipe(
-            map((respone) =>
+            concatMap((respone) => [
               MoviesActions.toggleMovieToWatchLaterSuccess({
                 status_code: respone.status_code,
                 status_message: respone.status_message,
-              })
-            ),
+              }),
+              MoviesActions.loadWatchLater(),
+            ]),
             catchError((error) =>
               of(MoviesActions.toggleMovieToWatchLaterFailure({ error }))
             )
           );
+      })
+    )
+  );
+
+  // News Subscription
+  getSubscriber$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.getSubscriber),
+      map(() => {
+        const subscriberData = this.newsSubscriptionService.getSubscriber();
+        return MoviesActions.getSubscriberSuccess({
+          subscriber: subscriberData,
+        });
+      })
+    )
+  );
+
+  addSubscription$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(MoviesActions.setSubscriberToLocalStorage),
+        tap((action) =>
+          this.newsSubscriptionService.addSubscriptionToLocalSotrage(
+            action.subscriber
+          )
+        )
+      ),
+    { dispatch: false }
+  );
+
+  removeSubscription$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(MoviesActions.removeSubsciption),
+        tap(() =>
+          this.newsSubscriptionService.removeSubsciptionFromLocalStorage()
+        )
+      ),
+    { dispatch: false }
+  );
+
+  // Login
+  getUserData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.getUserData),
+      map(() => {
+        const userData = this.authService.getUserData();
+        return MoviesActions.getUserDataSuccess({ userData });
+      })
+    )
+  );
+
+  addUserData$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(MoviesActions.setUserDataToLocalStorage),
+        tap((action) =>
+          this.authService.addUserDataToLocalStorage(action.userData)
+        )
+      ),
+    { dispatch: false }
+  );
+
+  authenticateUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.authenticateUser),
+      switchMap((action) =>
+        this.authService
+          .authenticateAndGetAccountId(action.username, action.password)
+          .pipe(
+            map((accountId) =>
+              MoviesActions.authenticateUserSuccess({ accountId })
+            ),
+            catchError((error) =>
+              of(MoviesActions.authenticateUserFailure({ error }))
+            )
+          )
+      )
+    )
+  );
+
+  removeUser$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(MoviesActions.removeUser),
+        tap(() => this.authService.removeUserFromLocalStorage())
+      ),
+    { dispatch: false }
+  );
+
+  // Genres
+  loadGenres$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.loadGenres),
+      switchMap(() => {
+        return this.movieService.loadMoviesGenres().pipe(
+          map((result) => {
+            const genres = result.genres;
+            return MoviesActions.loadGenresSuccess({ genres });
+          }),
+          catchError((error) => of(MoviesActions.loadGenresFailure({ error })))
+        );
       })
     )
   );

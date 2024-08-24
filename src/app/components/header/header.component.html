@@ -1,15 +1,26 @@
 <header class="header">
   <div class="header__container">
     <app-menu-sidebar></app-menu-sidebar>
-    <nav class="header__navigation">
-      <ul class="header__list">
-        <li class="header__item">
-          <a [routerLink]="['/favorites']" routerLinkActive="active-link" class="header__link">My Favorites</a>
-        </li>
-        <li class="header__item">
-          <a [routerLink]="['/watch-later']" routerLinkActive="active-link" class="header__link">Watch Later</a>
-        </li>
-      </ul>
-    </nav>
+    <div class="header__content">
+      <nav class="header__navigation">
+        <ul class="header__list">
+          <li class="header__item">
+            <a [routerLink]="['/favorites']" routerLinkActive="active-link" class="header__link">My Favorites</a>
+          </li>
+          <li class="header__item">
+            <a [routerLink]="['/watch-later']" routerLinkActive="active-link" class="header__link">Watch Later</a>
+          </li>
+        </ul>
+      </nav>
+      @if (user) {
+      <div>
+        <p-toast />
+        <p-confirmPopup />
+        <button (click)="confirm($event)">
+          <p-avatar [label]="user.name[0]" styleClass="mr-2" [style]="{ 'background-color': '#ece9fc', color: '#2a1261' }" shape="circle" />
+        </button>
+      </div>
+      }
+    </div>
   </div>
 </header>

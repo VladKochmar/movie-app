@@ -8,6 +8,12 @@
     justify-content: space-between;
     gap: 0 1.5rem;
   }
+  // .header__content
+  &__content {
+    display: inline-flex;
+    align-items: center;
+    gap: 0 1.75rem;
+  }
   // .header__list
   &__list {
     display: flex;
@@ -21,6 +27,9 @@
     font-size: 0.875rem;
     line-height: 1.5;
     transition: color 0.3s ease 0s;
+    @media (width < 480px) {
+      font-size: 0.75rem;
+    }
     @media (any-hover: hover) {
       &:hover {
         color: #b6b6b6;

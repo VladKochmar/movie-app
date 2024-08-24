@@ -1,34 +1,50 @@
 import { Routes } from '@angular/router';
-import { FavoritesComponent } from './pages/favorites/favorites.component';
-import { WatchLaterComponent } from './pages/watch-later/watch-later.component';
-import { MovieDetailsComponent } from './pages/movie-details/movie-details.component';
 import { MoviesResolver } from './guards/movies.resolver';
 import { CurrentMovieResolver } from './guards/current-movie.resolver';
-import { MoviesByCategoryComponent } from './pages/movies-by-category/movies-by-category.component';
-import { HomeComponent } from './pages/home/home.component';
 import { FavoritesResolver } from './guards/favorites.resolver';
 import { WatchLaterResolver } from './guards/watch-later.resolver';
+import { HomeResolver } from './guards/home.resolver';
+import { AuthGuard } from './guards/auth-guard.guard';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
+  {
+    path: '',
+    loadComponent: () =>
+      import('./pages/home/home.component').then((m) => m.HomeComponent),
+    resolve: { home: HomeResolver },
+  },
   {
     path: 'movie/:id',
-    component: MovieDetailsComponent,
+    loadComponent: () =>
+      import('./pages/movie-details/movie-details.component').then(
+        (m) => m.MovieDetailsComponent
+      ),
     resolve: { movie: CurrentMovieResolver },
   },
   {
     path: 'favorites',
-    component: FavoritesComponent,
+    loadComponent: () =>
+      import('./pages/favorites/favorites.component').then(
+        (m) => m.FavoritesComponent
+      ),
+    canActivate: [AuthGuard],
     resolve: { favorites: FavoritesResolver },
   },
   {
     path: 'watch-later',
-    component: WatchLaterComponent,
+    loadComponent: () =>
+      import('./pages/watch-later/watch-later.component').then(
+        (m) => m.WatchLaterComponent
+      ),
+    canActivate: [AuthGuard],
     resolve: { watchLater: WatchLaterResolver },
   },
   {
-    path: 'movies/:category',
-    component: MoviesByCategoryComponent,
+    path: 'movies/:category/:page',
+    loadComponent: () =>
+      import('./pages/movies-by-category/movies-by-category.component').then(
+        (m) => m.MoviesByCategoryComponent
+      ),
     resolve: { movies: MoviesResolver },
   },
 ];
