@@ -59,7 +59,7 @@ describe('MovieService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.API_URL}/movie/popular?api_key=${environment.API_KEY}`
+      `${environment.API_URL}/movie/popular?api_key=${environment.API_KEY}`,
     );
 
     expect(req.request.method).toEqual('GET');
@@ -74,7 +74,7 @@ describe('MovieService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      `${environment.API_URL}/movie/1022789?api_key=${environment.API_KEY}`
+      `${environment.API_URL}/movie/1022789?api_key=${environment.API_KEY}`,
     );
 
     expect(req.request.method).toEqual('GET');
@@ -93,7 +93,7 @@ describe('MovieService', () => {
         environment.API_URL
       }/account/${service.getAccoundId()}/favorite/movies?api_key=${
         environment.API_KEY
-      }`
+      }`,
     );
 
     expect(req.request.method).toEqual('GET');
@@ -112,7 +112,7 @@ describe('MovieService', () => {
         environment.API_URL
       }/account/${service.getAccoundId()}/watchlist/movies?api_key=${
         environment.API_KEY
-      }`
+      }`,
     );
 
     expect(req.request.method).toEqual('GET');
@@ -138,15 +138,15 @@ describe('MovieService', () => {
         environment.API_URL
       }/account/${service.getAccoundId()}/favorite?api_key=${
         environment.API_KEY
-      }&session_id=${service.getSessionId()}`
+      }&session_id=${service.getSessionId()}`,
     );
 
     expect(req.request.method).toBe('POST');
     expect(req.request.headers.get('Content-Type')).toBe(
-      'application/json;charset=utf-8'
+      'application/json;charset=utf-8',
     );
     expect(req.request.headers.get('Authorization')).toBe(
-      `Bearer ${environment.API_ACCESS_TOKEN}`
+      `Bearer ${environment.API_ACCESS_TOKEN}`,
     );
     expect(req.request.body).toEqual({
       media_type: 'movie',
