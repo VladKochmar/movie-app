@@ -85,7 +85,7 @@ export class MovieCardComponent extends ClearObservable implements OnInit {
 
   ngOnInit(): void {
     this.imageSrc = this.movie?.poster_path
-      ? 'https:/image.tmdb.org/t/p/w500' + this.movie?.poster_path
+      ? 'https://image.tmdb.org/t/p/w500' + this.movie?.poster_path
       : null;
 
     this.store

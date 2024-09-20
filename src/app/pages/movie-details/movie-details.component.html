@@ -3,7 +3,7 @@
     @if (movie) {
     <div class="movie-page__content">
       <div class="movie-page__image-box">
-        <img [src]="'https:/image.tmdb.org/t/p/w500'+movie.poster_path | defaultImage:'../../../assets/images/movies-card/not-found.jpg'" [alt]="movie.title" class="movie-page__img">
+        <img [src]="'https://image.tmdb.org/t/p/w500'+movie.poster_path | defaultImage:'../../../assets/images/movies-card/not-found.jpg'" [alt]="movie.title" class="movie-page__img">
       </div>
       <div class="movie-page__details">
         <h1 class="movie-page__title title">{{movie.title}}</h1>
