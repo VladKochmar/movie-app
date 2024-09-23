@@ -31,7 +31,10 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './movie-search.component.scss',
 })
 export class MovieSearchComponent extends ClearObservable implements OnInit {
-  constructor(private store: Store, private router: Router) {
+  constructor(
+    private store: Store,
+    private router: Router,
+  ) {
     super();
   }
 
@@ -55,7 +58,7 @@ export class MovieSearchComponent extends ClearObservable implements OnInit {
 
   onSearch() {
     this.store.dispatch(
-      loadMoviesByTitle({ title: this.form.value.searchInput })
+      loadMoviesByTitle({ title: this.form.value.searchInput }),
     );
   }
 

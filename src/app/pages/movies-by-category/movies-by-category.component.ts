@@ -29,7 +29,7 @@ export class MoviesByCategoryComponent
   constructor(
     private store: Store,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) {
     super();
   }
@@ -51,7 +51,7 @@ export class MoviesByCategoryComponent
         map((params) => {
           this.category = params.get('category');
           return params.get('category');
-        })
+        }),
       )
       .subscribe((category) => {
         this.title = this.getTitleByCategory(category);

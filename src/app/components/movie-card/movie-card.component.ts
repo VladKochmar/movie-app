@@ -40,7 +40,10 @@ import { LoginPopupComponent } from '../login-popup/login-popup.component';
   styleUrl: './movie-card.component.scss',
 })
 export class MovieCardComponent extends ClearObservable implements OnInit {
-  constructor(private store: Store, private dialogService: DialogService) {
+  constructor(
+    private store: Store,
+    private dialogService: DialogService,
+  ) {
     super();
   }
 
@@ -58,7 +61,7 @@ export class MovieCardComponent extends ClearObservable implements OnInit {
     if (this.user) {
       this.isFavorite = !this.isFavorite;
       this.store.dispatch(
-        toggleMovieToFavorite({ movieId, isFavorite: this.isFavorite })
+        toggleMovieToFavorite({ movieId, isFavorite: this.isFavorite }),
       );
     } else {
       this.initPopup();
@@ -69,7 +72,7 @@ export class MovieCardComponent extends ClearObservable implements OnInit {
     if (this.user) {
       this.isWatchLater = !this.isWatchLater;
       this.store.dispatch(
-        toggleMovieToWatchLater({ movieId, isWatchLater: this.isWatchLater })
+        toggleMovieToWatchLater({ movieId, isWatchLater: this.isWatchLater }),
       );
     } else {
       this.initPopup();

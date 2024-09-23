@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { HeaderComponent } from './components/header/header.component';
@@ -29,13 +29,14 @@ describe('AppComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HeaderComponent, HttpClientModule],
-      providers: [
+    imports: [RouterTestingModule, HeaderComponent],
+    providers: [
         { provide: MovieService, useValue: movieServiceMock },
         { provide: AuthService, useValue: authServiceMock },
         provideMockStore(),
-      ],
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
+}).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;

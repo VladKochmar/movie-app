@@ -15,7 +15,10 @@ export class MovieService {
   private accountId: number | null = null;
   private sessionId: number | null = null;
 
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(
+    private http: HttpClient,
+    private store: Store,
+  ) {}
 
   // Ids
   setSessionId(id: number) {
@@ -36,7 +39,7 @@ export class MovieService {
 
   getMoviesByCategory(
     category: string,
-    page: number | string | null
+    page: number | string | null,
   ): Observable<MovieApi> {
     let url = `${environment.API_URL}/movie/${category}?api_key=${environment.API_KEY}`;
 
@@ -47,7 +50,7 @@ export class MovieService {
 
   loadFilteredMovies(
     category: string,
-    page: number | string | null
+    page: number | string | null,
   ): Observable<{ movies: Movie[]; totalMovies: number }> {
     return this.getMoviesByCategory(category, page).pipe(
       withLatestFrom(this.store.select(selectGenre)),
@@ -58,20 +61,20 @@ export class MovieService {
           return true;
         });
         return { movies: filteredMovies, totalMovies: moviesApi.total_results };
-      })
+      }),
     );
   }
 
   loadMovieById(id: number): Observable<Movie> {
     return this.http.get<Movie>(
-      `${environment.API_URL}/movie/${id}?api_key=${environment.API_KEY}`
+      `${environment.API_URL}/movie/${id}?api_key=${environment.API_KEY}`,
     );
   }
 
   loadMoviesByTitle(movieTitle: string): Observable<MovieApi> {
     const title = movieTitle.trim().replace(/ /g, '+');
     return this.http.get<MovieApi>(
-      `${environment.API_URL}/search/movie?query=${title}&api_key=${environment.API_KEY}`
+      `${environment.API_URL}/search/movie?query=${title}&api_key=${environment.API_KEY}`,
     );
   }
 
@@ -83,13 +86,13 @@ export class MovieService {
     };
     return this.http.get<MovieApi>(
       `${environment.API_URL}/account/${this.accountId}/watchlist/movies?api_key=${environment.API_KEY}`,
-      { headers }
+      { headers },
     );
   }
 
   toggleMovieToWatchLater(
     movieId: number,
-    isWatchLater: boolean
+    isWatchLater: boolean,
   ): Observable<any> {
     const headers = {
       'Content-Type': 'application/json;charset=utf-8',
@@ -105,7 +108,7 @@ export class MovieService {
     return this.http.post<any>(
       `${environment.API_URL}/account/${this.accountId}/watchlist?api_key=${environment.API_KEY}&session_id=${this.sessionId}`,
       body,
-      { headers }
+      { headers },
     );
   }
 
@@ -117,13 +120,13 @@ export class MovieService {
     };
     return this.http.get<MovieApi>(
       `${environment.API_URL}/account/${this.accountId}/favorite/movies?api_key=${environment.API_KEY}`,
-      { headers }
+      { headers },
     );
   }
 
   toggleMovieToFavorites(
     movieId: number,
-    isFavorite: boolean
+    isFavorite: boolean,
   ): Observable<any> {
     const headers = {
       'Content-Type': 'application/json;charset=utf-8',
@@ -139,14 +142,14 @@ export class MovieService {
     return this.http.post<any>(
       `${environment.API_URL}/account/${this.accountId}/favorite?api_key=${environment.API_KEY}&session_id=${this.sessionId}`,
       body,
-      { headers }
+      { headers },
     );
   }
 
   // Genres
   loadMoviesGenres(): Observable<GenresApi> {
     return this.http.get<GenresApi>(
-      `${environment.API_URL}/genre/movie/list?api_key=${environment.API_KEY}&language=en`
+      `${environment.API_URL}/genre/movie/list?api_key=${environment.API_KEY}&language=en`,
     );
   }
 }

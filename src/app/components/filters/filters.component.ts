@@ -27,7 +27,10 @@ import { ActivatedRoute } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FiltersComponent extends ClearObservable implements OnInit {
-  constructor(private store: Store, private route: ActivatedRoute) {
+  constructor(
+    private store: Store,
+    private route: ActivatedRoute,
+  ) {
     super();
   }
 
@@ -75,13 +78,13 @@ export class FiltersComponent extends ClearObservable implements OnInit {
     this.store.dispatch(setSelectedGenre({ genre: this.currentGenre }));
     if (this.category)
       this.store.dispatch(
-        loadFilteredMovies({ category: this.category, page: this.page })
+        loadFilteredMovies({ category: this.category, page: this.page }),
       );
   }
 
   onSortTypeChange() {
     this.store.dispatch(
-      setSelectedSortType({ sortType: this.currentSortType })
+      setSelectedSortType({ sortType: this.currentSortType }),
     );
   }
 }

@@ -40,7 +40,10 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPopupComponent implements OnInit {
-  constructor(private store: Store, private ref: DynamicDialogRef) {}
+  constructor(
+    private store: Store,
+    private ref: DynamicDialogRef,
+  ) {}
 
   form!: FormGroup;
 
@@ -64,7 +67,7 @@ export class LoginPopupComponent implements OnInit {
         authenticateUser({
           username: userData.name,
           password: userData.password,
-        })
+        }),
       );
 
       this.ref.close(userData);

@@ -52,7 +52,7 @@ export class NewsSubscriptionComponent
 {
   constructor(
     private messageService: MessageService,
-    private store: Store<MovieState>
+    private store: Store<MovieState>,
   ) {
     super();
   }
@@ -107,7 +107,7 @@ export class NewsSubscriptionComponent
       });
 
       this.store.dispatch(
-        setSubscriberToLocalStorage({ subscriber: this.form.value })
+        setSubscriberToLocalStorage({ subscriber: this.form.value }),
       );
       this.store.dispatch(getSubscriber());
     }

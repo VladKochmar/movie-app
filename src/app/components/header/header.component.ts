@@ -33,7 +33,7 @@ export class HeaderComponent extends ClearObservable implements OnInit {
   constructor(
     private store: Store,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
   ) {
     super();
   }

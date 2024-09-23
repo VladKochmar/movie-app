@@ -39,15 +39,15 @@ export class MoviesResolver implements Resolve<boolean> {
                   authenticateUser({
                     username: accountData.name,
                     password: accountData.password,
-                  })
+                  }),
                 );
               }
               this.store.dispatch(loadFavorites());
               this.store.dispatch(loadWatchLater());
               return true;
-            })
+            }),
           );
-        })
+        }),
       );
     }
 
