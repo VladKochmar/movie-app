@@ -12,9 +12,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { loadMoviesByTitle } from '../../store/actions';
 import { selectSearchedMoviesTitles } from '../../store/selectors';
 import { TitleItem } from '../../models/title-item.model';
-import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
-import { takeUntil } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
+import { rxState } from '@rx-angular/state';
+import { RxIf } from '@rx-angular/template/if';
+import { RxLet } from '@rx-angular/template/let';
 
 @Component({
   selector: 'app-movie-search',
@@ -26,34 +27,35 @@ import { Router, RouterLink } from '@angular/router';
     ButtonModule,
     FormsModule,
     ReactiveFormsModule,
+    RxIf,
+    RxLet,
   ],
   templateUrl: './movie-search.component.html',
   styleUrl: './movie-search.component.scss',
 })
-export class MovieSearchComponent extends ClearObservable implements OnInit {
+export class MovieSearchComponent implements OnInit {
+  readonly state = rxState<{ titlesList: TitleItem[] | null }>(
+    ({ set, connect }) => {
+      set({ titlesList: null });
+
+      connect('titlesList', this.store.select(selectSearchedMoviesTitles));
+    },
+  );
+
   constructor(
     private store: Store,
     private router: Router,
-  ) {
-    super();
-  }
+  ) {}
 
   @Output() closeSidebarEvent = new EventEmitter<boolean>();
 
   form!: FormGroup;
-  selectedSearchedMoviesTitles$ = this.store.select(selectSearchedMoviesTitles);
-  titlesList: TitleItem[] | null = null;
+  titlesList$ = this.state.select('titlesList');
 
   ngOnInit(): void {
     this.form = new FormGroup({
       searchInput: new FormControl<string>(''),
     });
-
-    this.selectedSearchedMoviesTitles$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        this.titlesList = data;
-      });
   }
 
   onSearch() {
@@ -63,8 +65,10 @@ export class MovieSearchComponent extends ClearObservable implements OnInit {
   }
 
   onSubmit() {
-    if (this.form.valid && this.titlesList) {
-      this.router.navigate(['/movie', this.titlesList[0].id]);
+    const titles = this.state.get('titlesList');
+
+    if (this.form.valid && titles) {
+      this.router.navigate(['/movie', titles[0].id]);
       this.closeSidebarEvent.emit(false);
     }
   }

@@ -2,8 +2,7 @@
   <div class="news-subscription__container">
     <h2 class="news-subscription__title title">Join Us!</h2>
     <p class="news-subscription__subtitle">Subscribe to our mailling list</p>
-    @if(subscriber) {
-    <div class="subscriber-info">
+    <div *rxIf="subscriber$; else: news_form; let subscriber" class="subscriber-info">
       <ul class="subscriber-info__list">
         <li class="subscriber-info__item">Name: <strong>{{subscriber.name}}</strong></li>
         <li class="subscriber-info__item">Email: <strong>{{subscriber.email}}</strong></li>
@@ -11,43 +10,41 @@
       <p class="subscriber-info__text">Would you like to unsubscribe from the newsletter?</p>
       <p-button label="Unsubscribe" styleClass="item-form-news" (click)="onUnsubscribe()" />
     </div>
-    } @else {
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-news">
-      <div class="form-news__item">
-        <input pInputText formControlName="name" placeholder="Username" class="item-form-news" />
-        @if(form.get('name')?.invalid && form.get('name')?.touched){
-        <div class="error-label">Name is required</div>
-        }
-      </div>
-      <div class="form-news__item">
-        <input pInputText formControlName="email" placeholder="Email" class="item-form-news" />
-        @if (form.get('email')?.invalid && form.get('email')?.touched) {
-        <div class="error-label">Email is required</div>
-        }
-      </div>
-      <div class="form-news__item">
-        <p-calendar formControlName="date" dateFormat="dd.mm.yy" [maxDate]="maxDate" placeholder="Date of birth" styleClass="item-form-news" />
-        @if(form.get('date')?.invalid && form.get('date')?.touched) {
-        <div class="error-label">Date is required</div>
-        }
-      </div>
-      @if(genres) {
-      <div class="form-news__item">
-        <p-multiSelect [options]="genres" formControlName="selectedGenres" optionLabel="name" placeholder="Select Genres" styleClass="item-form-news" />
-        @if(form.get('selectedGenres')?.invalid && form.get('selectedGenres')?.touched){
-        <div class="error-label">You have to choose your favorite genres</div>
-        }
-      </div>
-      }
-      <div class="form-news__item form-news__item_center">
-        <p-checkbox formControlName="agreement" [binary]="true" inputId="agreement" />
-        <label for="agreement" class="form-news__checkbox-label">I agree with the rules</label>
-      </div>
-      <div class="form-news__item">
-        <p-button type="submit" label="Subscribe" [disabled]="form.invalid" styleClass="item-form-news" />
-      </div>
-    </form>
-    }
+    <ng-template #news_form>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-news">
+        <div class="form-news__item">
+          <input pInputText formControlName="name" placeholder="Username" class="item-form-news" />
+          @if(form.get('name')?.invalid && form.get('name')?.touched){
+          <div class="error-label">Name is required</div>
+          }
+        </div>
+        <div class="form-news__item">
+          <input pInputText formControlName="email" placeholder="Email" class="item-form-news" />
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+          <div class="error-label">Email is required</div>
+          }
+        </div>
+        <div class="form-news__item">
+          <p-calendar formControlName="date" dateFormat="dd.mm.yy" [maxDate]="maxDate" placeholder="Date of birth" styleClass="item-form-news" />
+          @if(form.get('date')?.invalid && form.get('date')?.touched) {
+          <div class="error-label">Date is required</div>
+          }
+        </div>
+        <div *rxIf="genres$; let genres" class="form-news__item">
+          <p-multiSelect [options]="genres" formControlName="selectedGenres" optionLabel="name" placeholder="Select Genres" styleClass="item-form-news" />
+          @if(form.get('selectedGenres')?.invalid && form.get('selectedGenres')?.touched){
+          <div class="error-label">You have to choose your favorite genres</div>
+          }
+        </div>
+        <div class="form-news__item form-news__item_center">
+          <p-checkbox formControlName="agreement" [binary]="true" inputId="agreement" />
+          <label for="agreement" class="form-news__checkbox-label">I agree with the rules</label>
+        </div>
+        <div class="form-news__item">
+          <p-button type="submit" label="Subscribe" [disabled]="form.invalid" styleClass="item-form-news" />
+        </div>
+      </form>
+    </ng-template>
   </div>
 </div>
 <p-toast position="bottom-right" key="br" [breakpoints]="{ '480px': { width: '100%', right: '0', left: '0' } }" styleClass="subscribe-toast" />

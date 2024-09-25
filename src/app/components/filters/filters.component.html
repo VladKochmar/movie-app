@@ -1,6 +1,8 @@
 <div class="filter">
-  @if(genres && sortProps) {
-  <p-dropdown [options]="genres" [(ngModel)]="currentGenre" optionLabel="name" [showClear]="true" placeholder="Select a Genre" styleClass="filter__select" (onChange)="onGenreChange()" />
-  <p-dropdown [options]="sortProps" [(ngModel)]="currentSortType" optionLabel="name" [showClear]="true" placeholder="Sort by" styleClass="filter__select" (onChange)="onSortTypeChange()" />
-  }
+  <ng-container *rxIf="genres$; let genres">
+    <p-dropdown *rxLet="currentGenre$ as currentGenre" [options]="genres" [ngModel]="currentGenre" optionLabel="name" [showClear]="true" placeholder="Select a Genre" styleClass="filter__select" (onChange)="onGenreChange($event.value)" />
+  </ng-container>
+  <ng-container *rxIf="sortProps$; let sortProps">
+    <p-dropdown *rxLet="currentSortType$ as currentSortType" [options]="sortProps" [ngModel]="currentSortType" optionLabel="name" [showClear]="true" placeholder="Sort by" styleClass="filter__select" (onChange)="onSortTypeChange($event.value)" />
+  </ng-container>
 </div>

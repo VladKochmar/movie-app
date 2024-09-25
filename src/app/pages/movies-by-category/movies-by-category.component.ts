@@ -1,80 +1,102 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MoviesListComponent } from '../../components/movies-list/movies-list.component';
 import type { Movie } from '../../models/movie.model';
 import { Store } from '@ngrx/store';
 import { selectSortedMovies, selectTotalMovies } from '../../store/selectors';
-import { map, takeUntil } from 'rxjs';
-import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
+import { map } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FiltersComponent } from '../../components/filters/filters.component';
 import { FavoritesComponent } from '../favorites/favorites.component';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { rxState } from '@rx-angular/state';
+import { RxIf } from '@rx-angular/template/if';
+import { CommonModule } from '@angular/common';
+
+interface MovieByCategoryState {
+  sortedMovies: Movie[] | null;
+  totalRecords: number | null;
+  category: string | null;
+  title: string | null;
+  page: number;
+  first: number;
+}
 
 @Component({
   selector: 'app-movies-by-category',
   standalone: true,
   imports: [
+    CommonModule,
     MoviesListComponent,
     FiltersComponent,
     FavoritesComponent,
     PaginatorModule,
+    RxIf,
   ],
   templateUrl: './movies-by-category.component.html',
   styleUrl: './movies-by-category.component.scss',
 })
-export class MoviesByCategoryComponent
-  extends ClearObservable
-  implements OnInit
-{
+export class MoviesByCategoryComponent {
+  readonly state = rxState<MovieByCategoryState>(({ set, connect }) => {
+    set({
+      sortedMovies: null,
+      totalRecords: null,
+      category: null,
+      title: null,
+      page: 1,
+      first: 0,
+    });
+
+    connect('sortedMovies', this.store.select(selectSortedMovies));
+    connect('totalRecords', this.store.select(selectTotalMovies));
+
+    connect(
+      'category',
+      this.route.paramMap.pipe(map((param) => param.get('category'))),
+    );
+
+    connect(
+      'title',
+      this.route.paramMap.pipe(
+        map((param) => this.getTitleByCategory(param.get('category'))),
+      ),
+    );
+
+    connect(
+      'page',
+      this.route.paramMap.pipe(
+        map((params) => Number(params.get('page')) || 1),
+      ),
+    );
+
+    connect(
+      'first',
+      this.route.paramMap.pipe(
+        map((params) => (Number(params.get('page')) - 1) * 20),
+      ),
+    );
+  });
+
+  sortedMovies$ = this.state.select('sortedMovies');
+  totalRecords$ = this.state.select('totalRecords');
+  title$ = this.state.select('title');
+  first$ = this.state.select('first');
+
   constructor(
     private store: Store,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-    super();
-  }
-
-  title: string | null = null;
-  category: string | null = null;
-
-  movies: Movie[] | null = [];
-  selectedSortedMovies$ = this.store.select(selectSortedMovies);
-
-  page: number = 1;
-  totalRecords: number | null = null;
-  selectedTotalMovies$ = this.store.select(selectTotalMovies);
-
-  ngOnInit(): void {
-    this.route.paramMap
-      .pipe(
-        takeUntil(this.destroy$),
-        map((params) => {
-          this.category = params.get('category');
-          return params.get('category');
-        }),
-      )
-      .subscribe((category) => {
-        this.title = this.getTitleByCategory(category);
-      });
-
-    this.selectedSortedMovies$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((moviesList) => {
-        this.movies = moviesList;
-      });
-
-    this.selectedTotalMovies$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((totalMovies) => {
-        this.totalRecords = totalMovies;
-      });
-  }
+  ) {}
 
   onPageChange(event: PaginatorState) {
-    if (event.page || event.page === 0) this.page = event.page + 1;
+    let page = this.state.get('page');
+    const category = this.state.get('category');
 
-    if (this.category)
-      this.router.navigate([`/movies/${this.category}/${this.page}`]);
+    if (event.page || event.page === 0) {
+      page = event.page + 1;
+      this.state.set({ page });
+    }
+
+    if (category) this.router.navigate([`/movies/${category}/${page}`]);
   }
 
   getTitleByCategory(category: string | null) {

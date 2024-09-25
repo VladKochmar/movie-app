@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenuSidebarComponent } from '../menu-sidebar/menu-sidebar.component';
@@ -6,12 +6,12 @@ import { AvatarModule } from 'primeng/avatar';
 import { Store } from '@ngrx/store';
 import { AccountTMDB } from '../../models/tmdb-account.model';
 import { selectUserData } from '../../store/selectors';
-import { takeUntil } from 'rxjs';
-import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { getUserData, removeUser } from '../../store/actions';
+import { rxState } from '@rx-angular/state';
+import { RxIf } from '@rx-angular/template/if';
 
 @Component({
   selector: 'app-header',
@@ -24,22 +24,25 @@ import { getUserData, removeUser } from '../../store/actions';
     AvatarModule,
     ConfirmPopupModule,
     ToastModule,
+    RxIf,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent extends ClearObservable implements OnInit {
+export class HeaderComponent {
+  readonly state = rxState<{ user: AccountTMDB | null }>(({ set, connect }) => {
+    set({ user: null });
+    connect('user', this.store.select(selectUserData));
+  });
+
   constructor(
     private store: Store,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-  ) {
-    super();
-  }
+  ) {}
 
-  selectUser$ = this.store.select(selectUserData);
-  user: AccountTMDB | null = null;
+  user$ = this.state.select('user');
 
   confirm(event: Event) {
     this.confirmationService.confirm({
@@ -64,12 +67,6 @@ export class HeaderComponent extends ClearObservable implements OnInit {
           life: 3000,
         });
       },
-    });
-  }
-
-  ngOnInit(): void {
-    this.selectUser$.pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      this.user = response;
     });
   }
 }

@@ -9,7 +9,6 @@ import type { Movie } from '../../models/movie.model';
   imports: [CommonModule, MovieCardComponent],
   templateUrl: './movies-list.component.html',
   styleUrl: './movies-list.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MoviesListComponent {
   @Input() movies!: Movie[];
