@@ -54,7 +54,7 @@ describe('MovieSearchComponent', () => {
     component.form.setValue({ searchInput: 'test movie' });
     component.onSearch();
     expect(dispatchSpy).toHaveBeenCalledWith(
-      MoviesActions.loadMoviesByTitle({ title: 'test movie' })
+      MoviesActions.loadMoviesByTitle({ title: 'test movie' }),
     );
   });
 });

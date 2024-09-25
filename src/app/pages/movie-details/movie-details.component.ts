@@ -1,33 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DefaultImagePipe } from '../../pipes/default-image/default-image.pipe';
 import type { Movie } from '../../models/movie.model';
 import { Store } from '@ngrx/store';
 import { selectCurrentMovie } from '../../store/selectors';
-import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
-import { takeUntil } from 'rxjs';
 import { NewsSubscriptionComponent } from '../../components/news-subscription/news-subscription.component';
+import { rxState } from '@rx-angular/state';
+import { RxIf } from '@rx-angular/template/if';
 
 @Component({
   selector: 'app-movie-details',
   standalone: true,
-  imports: [CommonModule, DefaultImagePipe, NewsSubscriptionComponent],
+  imports: [CommonModule, DefaultImagePipe, NewsSubscriptionComponent, RxIf],
   templateUrl: './movie-details.component.html',
   styleUrl: './movie-details.component.scss',
 })
-export class MovieDetailsComponent extends ClearObservable implements OnInit {
-  movie: Movie | null = null;
-  selectedMovie$ = this.store.select(selectCurrentMovie);
+export class MovieDetailsComponent {
+  readonly state = rxState<{ movie: Movie | null }>(({ set, connect }) => {
+    set({ movie: null });
+    connect('movie', this.store.select(selectCurrentMovie));
+  });
 
-  constructor(private store: Store) {
-    super();
-  }
+  movie$ = this.state.select('movie');
 
-  ngOnInit(): void {
-    this.selectedMovie$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((currentMovie) => {
-        this.movie = currentMovie;
-      });
-  }
+  constructor(private store: Store) {}
 }

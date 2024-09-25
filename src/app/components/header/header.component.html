@@ -12,15 +12,13 @@
           </li>
         </ul>
       </nav>
-      @if (user) {
-      <div>
+      <div *rxIf="user$; let user">
         <p-toast />
         <p-confirmPopup />
         <button (click)="confirm($event)">
           <p-avatar [label]="user.name[0]" styleClass="mr-2" [style]="{ 'background-color': '#ece9fc', color: '#2a1261' }" shape="circle" />
         </button>
       </div>
-      }
     </div>
   </div>
 </header>

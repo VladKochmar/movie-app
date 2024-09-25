@@ -1,7 +1,6 @@
 <div class="movie-page">
   <div class="movie-page__container">
-    @if (movie) {
-    <div class="movie-page__content">
+    <div *rxIf="movie$; let movie" class="movie-page__content">
       <div class="movie-page__image-box">
         <img [src]="'https://image.tmdb.org/t/p/w500'+movie.poster_path | defaultImage:'../../../assets/images/movies-card/not-found.jpg'" [alt]="movie.title" class="movie-page__img">
       </div>
@@ -14,7 +13,6 @@
         <p class="movie-page__overview">{{ movie.overview }}</p>
       </div>
     </div>
-    }
   </div>
 </div>
 <app-news-subscription></app-news-subscription>

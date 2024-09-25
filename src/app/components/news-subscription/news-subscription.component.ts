@@ -23,9 +23,9 @@ import {
   setSubscriberToLocalStorage,
 } from '../../store/actions';
 import { SubscriberData } from '../../models/subscriber.model';
-import { takeUntil } from 'rxjs';
 import { selectGenres, selectSubscriber } from '../../store/selectors';
-import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
+import { rxState } from '@rx-angular/state';
+import { RxIf } from '@rx-angular/template/if';
 
 @Component({
   selector: 'app-news-subscription',
@@ -40,45 +40,38 @@ import { ClearObservable } from '../../directives/clear-observable/clear-observa
     MultiSelectModule,
     CheckboxModule,
     ButtonModule,
+    RxIf,
   ],
   providers: [MessageService],
   templateUrl: './news-subscription.component.html',
   styleUrl: './news-subscription.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewsSubscriptionComponent
-  extends ClearObservable
-  implements OnInit
-{
+export class NewsSubscriptionComponent implements OnInit {
+  readonly state = rxState<{
+    subscriber: SubscriberData | null;
+    genres: Genre[] | null;
+  }>(({ set, connect }) => {
+    set({ subscriber: null, genres: null });
+
+    connect('genres', this.store.select(selectGenres));
+    connect('subscriber', this.store.select(selectSubscriber));
+  });
+
   constructor(
     private messageService: MessageService,
-    private store: Store<MovieState>
-  ) {
-    super();
-  }
+    private store: Store<MovieState>,
+  ) {}
 
   form!: FormGroup;
   maxDate: Date | null = null;
   emailRequiredError: string | null = null;
 
-  selectedSubscriber$ = this.store.select(selectSubscriber);
-  subscriber: SubscriberData | null = null;
-
-  selectedGenres$ = this.store.select(selectGenres);
-  genres: Genre[] | null = null;
+  genres$ = this.state.select('genres');
+  subscriber$ = this.state.select('subscriber');
 
   ngOnInit(): void {
-    this.selectedSubscriber$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((response) => {
-        this.subscriber = response;
-      });
-
-    this.selectedGenres$.pipe(takeUntil(this.destroy$)).subscribe((respone) => {
-      this.genres = respone;
-    });
-
-    if (!this.subscriber) this.initForm();
+    if (!this.state.get('subscriber')) this.initForm();
   }
 
   initForm() {
@@ -107,7 +100,7 @@ export class NewsSubscriptionComponent
       });
 
       this.store.dispatch(
-        setSubscriberToLocalStorage({ subscriber: this.form.value })
+        setSubscriberToLocalStorage({ subscriber: this.form.value }),
       );
       this.store.dispatch(getSubscriber());
     }

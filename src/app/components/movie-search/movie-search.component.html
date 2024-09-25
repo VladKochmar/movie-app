@@ -2,14 +2,12 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="search-bar">
     <p-inputGroup>
       <input type="text" pInputText placeholder="Search..." formControlName="searchInput" (input)="onSearch()" />
-      <button type="submit" [disabled]="!titlesList?.length" pButton icon="pi pi-search"></button>
+      <button *rxLet="titlesList$ as titlesList" type="submit" [disabled]="!titlesList?.length" pButton icon="pi pi-search"></button>
     </p-inputGroup>
   </form>
-  @if(titlesList?.length) {
-  <ul class="search-section__list">
+  <ul *rxIf="titlesList$; let titlesList" class="search-section__list">
     @for (item of titlesList; track item.id) {
     <li class="search-section__item"><a [routerLink]="['/movie', item.id]" class="search-section__link">{{ item.title }}</a></li>
     }
   </ul>
-  }
 </div>

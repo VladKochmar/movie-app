@@ -1,8 +1,5 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { MovieService } from './movie.service';
 import { Movie } from '../../models/movie.model';
@@ -10,6 +7,7 @@ import { popularMovies } from '../../../data/mock-data';
 import { environment } from '../../../environments/environment.development';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MovieService', () => {
   let service: MovieService;
@@ -23,9 +21,9 @@ describe('MovieService', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [MovieService, { provide: Store, useValue: storeMock }],
-    });
+    imports: [],
+    providers: [MovieService, { provide: Store, useValue: storeMock }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
 
     injector = getTestBed();
 

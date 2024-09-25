@@ -9,8 +9,6 @@ import { ButtonModule } from 'primeng/button';
 import { RouterLink } from '@angular/router';
 import type { Movie } from '../../models/movie.model';
 import { Store } from '@ngrx/store';
-import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
-import { takeUntil } from 'rxjs';
 import {
   isFavorite,
   isWatchLater,
@@ -23,6 +21,14 @@ import {
 import { AccountTMDB } from '../../models/tmdb-account.model';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { LoginPopupComponent } from '../login-popup/login-popup.component';
+import { rxState } from '@rx-angular/state';
+import { RxLet } from '@rx-angular/template/let';
+
+interface MovieCardState {
+  isFavorite: boolean;
+  isWatchLater: boolean;
+  user: AccountTMDB | null;
+}
 
 @Component({
   selector: 'app-movie-card',
@@ -35,42 +41,70 @@ import { LoginPopupComponent } from '../login-popup/login-popup.component';
     CardModule,
     ButtonModule,
     RouterLink,
+    RxLet,
   ],
   templateUrl: './movie-card.component.html',
   styleUrl: './movie-card.component.scss',
 })
-export class MovieCardComponent extends ClearObservable implements OnInit {
-  constructor(private store: Store, private dialogService: DialogService) {
-    super();
-  }
+export class MovieCardComponent implements OnInit {
+  @Input() movie!: Movie;
 
-  @Input() movie: Movie | null = null;
+  readonly state = rxState<MovieCardState>(({ set, connect }) => {
+    set({ isFavorite: false, isWatchLater: false, user: null });
 
-  isFavorite: boolean = false;
-  isWatchLater: boolean = false;
+    connect('user', this.store.select(selectUserData));
+  });
+
+  constructor(
+    private store: Store,
+    private dialogService: DialogService,
+  ) {}
+
+  isFavorite$ = this.state.select('isFavorite');
+  isWatchLater$ = this.state.select('isWatchLater');
 
   imageSrc: string | null = null;
   defaultImageSrc: string = '../../../assets/images/movies-card/not-found.jpg';
 
-  user: AccountTMDB | null = null;
+  get favoritesIcon() {
+    return this.state.get('isFavorite') ? 'pi pi-heart-fill' : 'pi pi-heart';
+  }
+
+  get watchLaterIcon() {
+    return this.state.get('isWatchLater')
+      ? 'pi pi-bookmark-fill'
+      : 'pi pi-bookmark';
+  }
+
+  ngOnInit(): void {
+    this.imageSrc = this.movie?.poster_path
+      ? 'https://image.tmdb.org/t/p/w500' + this.movie?.poster_path
+      : null;
+
+    this.state.connect('isFavorite', this.store.select(isFavorite(this.movie)));
+    this.state.connect(
+      'isWatchLater',
+      this.store.select(isWatchLater(this.movie)),
+    );
+  }
 
   toggleMovieToFavorite(movieId: number) {
-    if (this.user) {
-      this.isFavorite = !this.isFavorite;
-      this.store.dispatch(
-        toggleMovieToFavorite({ movieId, isFavorite: this.isFavorite })
-      );
+    if (this.state.get('user')) {
+      const isFavorite = !this.state.get('isFavorite');
+      this.state.set({ isFavorite });
+
+      this.store.dispatch(toggleMovieToFavorite({ movieId, isFavorite }));
     } else {
       this.initPopup();
     }
   }
 
   toggleMovieToWatchLater(movieId: number) {
-    if (this.user) {
-      this.isWatchLater = !this.isWatchLater;
-      this.store.dispatch(
-        toggleMovieToWatchLater({ movieId, isWatchLater: this.isWatchLater })
-      );
+    if (this.state.get('user')) {
+      const isWatchLater = !this.state.get('isWatchLater');
+      this.state.set({ isWatchLater });
+
+      this.store.dispatch(toggleMovieToWatchLater({ movieId, isWatchLater }));
     } else {
       this.initPopup();
     }
@@ -81,34 +115,5 @@ export class MovieCardComponent extends ClearObservable implements OnInit {
       header: 'Log In With TMDB Account',
       width: '25rem',
     });
-  }
-
-  ngOnInit(): void {
-    this.imageSrc = this.movie?.poster_path
-      ? 'https://image.tmdb.org/t/p/w500' + this.movie?.poster_path
-      : null;
-
-    this.store
-      .select(selectUserData)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((response) => {
-        this.user = response;
-      });
-
-    if (this.movie) {
-      this.store
-        .select(isFavorite(this.movie))
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((response) => {
-          this.isFavorite = response;
-        });
-
-      this.store
-        .select(isWatchLater(this.movie))
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((response) => {
-          this.isWatchLater = response;
-        });
-    }
   }
 }
