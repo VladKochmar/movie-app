@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -15,7 +20,6 @@ import { ButtonModule } from 'primeng/button';
 import { Genre } from '../../models/genre.model';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { MovieState } from '../../store/state';
 import { Store } from '@ngrx/store';
 import {
   getSubscriber,
@@ -23,12 +27,12 @@ import {
   setSubscriberToLocalStorage,
 } from '../../store/actions';
 import { SubscriberData } from '../../models/subscriber.model';
+import { takeUntil } from 'rxjs';
 import { selectGenres, selectSubscriber } from '../../store/selectors';
-import { rxState } from '@rx-angular/state';
-import { RxIf } from '@rx-angular/template/if';
+import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
 
 @Component({
-  selector: 'app-news-subscription',
+  selector: 'wom-news-subscription',
   standalone: true,
   imports: [
     ToastModule,
@@ -40,38 +44,41 @@ import { RxIf } from '@rx-angular/template/if';
     MultiSelectModule,
     CheckboxModule,
     ButtonModule,
-    RxIf,
   ],
   providers: [MessageService],
   templateUrl: './news-subscription.component.html',
   styleUrl: './news-subscription.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NewsSubscriptionComponent implements OnInit {
-  readonly state = rxState<{
-    subscriber: SubscriberData | null;
-    genres: Genre[] | null;
-  }>(({ set, connect }) => {
-    set({ subscriber: null, genres: null });
-
-    connect('genres', this.store.select(selectGenres));
-    connect('subscriber', this.store.select(selectSubscriber));
-  });
-
-  constructor(
-    private messageService: MessageService,
-    private store: Store<MovieState>,
-  ) {}
+export class NewsSubscriptionComponent
+  extends ClearObservable
+  implements OnInit
+{
+  private messageService = inject(MessageService);
+  private store = inject(Store);
 
   form!: FormGroup;
   maxDate: Date | null = null;
   emailRequiredError: string | null = null;
 
-  genres$ = this.state.select('genres');
-  subscriber$ = this.state.select('subscriber');
+  selectedSubscriber$ = this.store.select(selectSubscriber);
+  subscriber: SubscriberData | null = null;
+
+  selectedGenres$ = this.store.select(selectGenres);
+  genres: Genre[] | null = null;
 
   ngOnInit(): void {
-    if (!this.state.get('subscriber')) this.initForm();
+    this.selectedSubscriber$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((response) => {
+        this.subscriber = response;
+      });
+
+    this.selectedGenres$.pipe(takeUntil(this.destroy$)).subscribe((respone) => {
+      this.genres = respone;
+    });
+
+    if (!this.subscriber) this.initForm();
   }
 
   initForm() {
@@ -100,7 +107,7 @@ export class NewsSubscriptionComponent implements OnInit {
       });
 
       this.store.dispatch(
-        setSubscriberToLocalStorage({ subscriber: this.form.value }),
+        setSubscriberToLocalStorage({ subscriber: this.form.value })
       );
       this.store.dispatch(getSubscriber());
     }

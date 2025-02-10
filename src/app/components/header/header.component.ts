@@ -1,20 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenuSidebarComponent } from '../menu-sidebar/menu-sidebar.component';
 import { AvatarModule } from 'primeng/avatar';
 import { Store } from '@ngrx/store';
-import { AccountTMDB } from '../../models/tmdb-account.model';
 import { selectUserData } from '../../store/selectors';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { getUserData, removeUser } from '../../store/actions';
-import { rxState } from '@rx-angular/state';
-import { RxIf } from '@rx-angular/template/if';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
-  selector: 'app-header',
+  selector: 'wom-header',
   standalone: true,
   imports: [
     RouterLink,
@@ -24,25 +22,18 @@ import { RxIf } from '@rx-angular/template/if';
     AvatarModule,
     ConfirmPopupModule,
     ToastModule,
-    RxIf,
+    AsyncPipe,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  readonly state = rxState<{ user: AccountTMDB | null }>(({ set, connect }) => {
-    set({ user: null });
-    connect('user', this.store.select(selectUserData));
-  });
+  private store = inject(Store);
+  private confirmationService = inject(ConfirmationService);
+  private messageService = inject(MessageService);
 
-  constructor(
-    private store: Store,
-    private confirmationService: ConfirmationService,
-    private messageService: MessageService,
-  ) {}
-
-  user$ = this.state.select('user');
+  selectUser$ = this.store.select(selectUserData);
 
   confirm(event: Event) {
     this.confirmationService.confirm({

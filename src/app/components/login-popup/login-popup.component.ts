@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -23,7 +28,7 @@ import {
 } from '../../store/actions';
 
 @Component({
-  selector: 'app-login-popup',
+  selector: 'wom-login-popup',
   standalone: true,
   imports: [
     DialogModule,
@@ -40,10 +45,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPopupComponent implements OnInit {
-  constructor(
-    private store: Store,
-    private ref: DynamicDialogRef,
-  ) {}
+  private store = inject(Store);
+  private ref = inject(DynamicDialogRef);
 
   form!: FormGroup;
 
@@ -67,7 +70,7 @@ export class LoginPopupComponent implements OnInit {
         authenticateUser({
           username: userData.name,
           password: userData.password,
-        }),
+        })
       );
 
       this.ref.close(userData);

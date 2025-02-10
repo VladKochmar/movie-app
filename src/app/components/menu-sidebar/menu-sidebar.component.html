@@ -8,7 +8,8 @@
         </a>
       </div>
     </ng-template>
-    <app-movie-search (closeSidebarEvent)="closeSidebar($event)"></app-movie-search>
+    <wom-movie-search (closeSidebarEvent)="closeSidebar($event)"></wom-movie-search>
+    @if (items) {
     <p-menu [model]="items" styleClass="sidebar-menu">
       <ng-template pTemplate="item" let-item>
         <a [routerLink]="item.route" class="p-menuitem-link">
@@ -17,6 +18,7 @@
         </a>
       </ng-template>
     </p-menu>
+    }
   </p-sidebar>
 </div>
 <p-button (click)="sidebarVisible = true" icon="pi pi-bars"></p-button>

@@ -1,10 +1,12 @@
 import { getTestBed, TestBed } from '@angular/core/testing';
 
 import { AuthService } from './auth.service';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -18,9 +20,9 @@ describe('AuthService', () => {
     };
 
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [AuthService, { provide: Store, useValue: storeMock }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [HttpClientTestingModule],
+      providers: [AuthService, { provide: Store, useValue: storeMock }],
+    });
 
     injector = getTestBed();
     service = injector.inject(AuthService);

@@ -1,6 +1,6 @@
 <header class="header">
   <div class="header__container">
-    <app-menu-sidebar></app-menu-sidebar>
+    <wom-menu-sidebar></wom-menu-sidebar>
     <div class="header__content">
       <nav class="header__navigation">
         <ul class="header__list">
@@ -12,13 +12,17 @@
           </li>
         </ul>
       </nav>
-      <div *rxIf="user$; let user">
+      @if (selectUser$ | async; as user) {
+      @if (user) {
+      <div>
         <p-toast />
         <p-confirmPopup />
         <button (click)="confirm($event)">
           <p-avatar [label]="user.name[0]" styleClass="mr-2" [style]="{ 'background-color': '#ece9fc', color: '#2a1261' }" shape="circle" />
         </button>
       </div>
+      }
+      }
     </div>
   </div>
 </header>

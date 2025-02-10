@@ -17,7 +17,7 @@ export const routes: Routes = [
     path: 'movie/:id',
     loadComponent: () =>
       import('./pages/movie-details/movie-details.component').then(
-        (m) => m.MovieDetailsComponent,
+        (m) => m.MovieDetailsComponent
       ),
     resolve: { movie: CurrentMovieResolver },
   },
@@ -25,7 +25,7 @@ export const routes: Routes = [
     path: 'favorites',
     loadComponent: () =>
       import('./pages/favorites/favorites.component').then(
-        (m) => m.FavoritesComponent,
+        (m) => m.FavoritesComponent
       ),
     canActivate: [AuthGuard],
     resolve: { favorites: FavoritesResolver },
@@ -34,7 +34,7 @@ export const routes: Routes = [
     path: 'watch-later',
     loadComponent: () =>
       import('./pages/watch-later/watch-later.component').then(
-        (m) => m.WatchLaterComponent,
+        (m) => m.WatchLaterComponent
       ),
     canActivate: [AuthGuard],
     resolve: { watchLater: WatchLaterResolver },
@@ -43,7 +43,7 @@ export const routes: Routes = [
     path: 'movies/:category/:page',
     loadComponent: () =>
       import('./pages/movies-by-category/movies-by-category.component').then(
-        (m) => m.MoviesByCategoryComponent,
+        (m) => m.MoviesByCategoryComponent
       ),
     resolve: { movies: MoviesResolver },
   },

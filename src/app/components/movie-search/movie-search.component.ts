@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -12,13 +12,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { loadMoviesByTitle } from '../../store/actions';
 import { selectSearchedMoviesTitles } from '../../store/selectors';
 import { TitleItem } from '../../models/title-item.model';
+import { ClearObservable } from '../../directives/clear-observable/clear-observable.directive';
+import { takeUntil } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
-import { rxState } from '@rx-angular/state';
-import { RxIf } from '@rx-angular/template/if';
-import { RxLet } from '@rx-angular/template/let';
 
 @Component({
-  selector: 'app-movie-search',
+  selector: 'wom-movie-search',
   standalone: true,
   imports: [
     RouterLink,
@@ -27,48 +26,41 @@ import { RxLet } from '@rx-angular/template/let';
     ButtonModule,
     FormsModule,
     ReactiveFormsModule,
-    RxIf,
-    RxLet,
   ],
   templateUrl: './movie-search.component.html',
   styleUrl: './movie-search.component.scss',
 })
-export class MovieSearchComponent implements OnInit {
-  readonly state = rxState<{ titlesList: TitleItem[] | null }>(
-    ({ set, connect }) => {
-      set({ titlesList: null });
-
-      connect('titlesList', this.store.select(selectSearchedMoviesTitles));
-    },
-  );
-
-  constructor(
-    private store: Store,
-    private router: Router,
-  ) {}
-
+export class MovieSearchComponent extends ClearObservable implements OnInit {
   @Output() closeSidebarEvent = new EventEmitter<boolean>();
 
+  private store = inject(Store);
+  private router = inject(Router);
+
   form!: FormGroup;
-  titlesList$ = this.state.select('titlesList');
+  selectedSearchedMoviesTitles$ = this.store.select(selectSearchedMoviesTitles);
+  titlesList: TitleItem[] | null = null;
 
   ngOnInit(): void {
     this.form = new FormGroup({
       searchInput: new FormControl<string>(''),
     });
+
+    this.selectedSearchedMoviesTitles$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.titlesList = data;
+      });
   }
 
   onSearch() {
     this.store.dispatch(
-      loadMoviesByTitle({ title: this.form.value.searchInput }),
+      loadMoviesByTitle({ title: this.form.value.searchInput })
     );
   }
 
   onSubmit() {
-    const titles = this.state.get('titlesList');
-
-    if (this.form.valid && titles) {
-      this.router.navigate(['/movie', titles[0].id]);
+    if (this.form.valid && this.titlesList) {
+      this.router.navigate(['/movie', this.titlesList[0].id]);
       this.closeSidebarEvent.emit(false);
     }
   }

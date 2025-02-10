@@ -26,14 +26,14 @@ export class FavoritesResolver implements Resolve<boolean> {
                 authenticateUser({
                   username: accountData.name,
                   password: accountData.password,
-                }),
+                })
               );
             }
             this.store.dispatch(loadFavorites());
             return true;
-          }),
+          })
         );
-      }),
+      })
     );
   }
 }

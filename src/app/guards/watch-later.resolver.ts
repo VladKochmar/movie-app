@@ -30,14 +30,14 @@ export class WatchLaterResolver implements Resolve<boolean> {
                 authenticateUser({
                   username: accountData.name,
                   password: accountData.password,
-                }),
+                })
               );
             }
             this.store.dispatch(loadWatchLater());
             return true;
-          }),
+          })
         );
-      }),
+      })
     );
   }
 }

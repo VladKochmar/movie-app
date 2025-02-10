@@ -1,12 +1,13 @@
 <div class="page">
   <div class="page__container">
     <h1 class="page__title title">My Favorites Movies</h1>
-    <ng-container *rxLet="favorites$ as favorites">
-      @if (favorites && favorites.length) {
-      <app-movies-list [movies]="favorites"></app-movies-list>
-      } @else {
-      <p class="empty-title">Currently, it is empty</p>
-      }
-    </ng-container>
+    @if(selectedFavorites$ | async; as favorites) {
+    @if(favorites.length) {
+    <wom-movies-list [movies]="favorites"></wom-movies-list>
+    }
+    @else {
+    <p class="empty-title">Currently, it is empty</p>
+    }
+    }
   </div>
 </div>

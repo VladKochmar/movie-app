@@ -7,7 +7,7 @@ import { MenuItem } from 'primeng/api';
 import { MovieSearchComponent } from '../movie-search/movie-search.component';
 
 @Component({
-  selector: 'app-menu-sidebar',
+  selector: 'wom-menu-sidebar',
   standalone: true,
   imports: [
     RouterLink,
@@ -21,10 +21,7 @@ import { MovieSearchComponent } from '../movie-search/movie-search.component';
 })
 export class MenuSidebarComponent implements OnInit {
   sidebarVisible: boolean = false;
-
-  items: MenuItem[] | undefined;
-
-  constructor() {}
+  items: MenuItem[] | null = null;
 
   closeSidebar(value: boolean) {
     this.sidebarVisible = value;

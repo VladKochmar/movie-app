@@ -1,12 +1,12 @@
 <div class="page">
   <div class="page__container">
     <h1 class="page__title title">Watch Later Movies</h1>
-    <ng-container *rxLet="watchLater$ as watchLater">
-      @if(watchLater && watchLater.length) {
-      <app-movies-list [movies]="watchLater"></app-movies-list>
-      } @else {
-      <p class="empty-title">Currently, it is empty</p>
-      }
-    </ng-container>
+    @if(selectedWatchLater$ | async; as watchLater) {
+    @if(watchLater.length) {
+    <wom-movies-list [movies]="watchLater"></wom-movies-list>
+    } @else {
+    <p class="empty-title">Currently, it is empty</p>
+    }
+    }
   </div>
 </div>

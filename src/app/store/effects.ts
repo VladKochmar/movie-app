@@ -20,7 +20,7 @@ export class MoviesEffects {
     private actions$: Actions,
     private movieService: MovieService,
     private newsSubscriptionService: NewsSubscriptionService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {}
 
   loadFilteredMovies$ = createEffect(() =>
@@ -31,10 +31,10 @@ export class MoviesEffects {
           map(({ movies, totalMovies }) => {
             return MoviesActions.loadMoviesSuccess({ movies, totalMovies });
           }),
-          catchError((error) => of(MoviesActions.loadMoviesFailure({ error }))),
+          catchError((error) => of(MoviesActions.loadMoviesFailure({ error })))
         );
-      }),
-    ),
+      })
+    )
   );
 
   loadMoviesByTitle$ = createEffect(() =>
@@ -53,11 +53,11 @@ export class MoviesEffects {
             });
           }),
           catchError((error) =>
-            of(MoviesActions.loadMoviesByTitleFailure({ error })),
-          ),
+            of(MoviesActions.loadMoviesByTitleFailure({ error }))
+          )
         );
-      }),
-    ),
+      })
+    )
   );
 
   loadMovieById$ = createEffect(() =>
@@ -66,10 +66,10 @@ export class MoviesEffects {
       switchMap(({ id }) => {
         return this.movieService.loadMovieById(id).pipe(
           map((movie) => MoviesActions.loadMovieSuccess({ movie })),
-          catchError((error) => of(MoviesActions.loadMovieFailure({ error }))),
+          catchError((error) => of(MoviesActions.loadMovieFailure({ error })))
         );
-      }),
-    ),
+      })
+    )
   );
 
   loadFavorites$ = createEffect(() =>
@@ -82,11 +82,11 @@ export class MoviesEffects {
             return MoviesActions.loadFavoritesSuccess({ movies: favorites });
           }),
           catchError((error) =>
-            of(MoviesActions.loadFavoritesFailure({ error })),
-          ),
+            of(MoviesActions.loadFavoritesFailure({ error }))
+          )
         );
-      }),
-    ),
+      })
+    )
   );
 
   toggleMovieToFavorite$ = createEffect(() =>
@@ -104,11 +104,11 @@ export class MoviesEffects {
               MoviesActions.loadFavorites(),
             ]),
             catchError((error) =>
-              of(MoviesActions.toggleMovieToFavoriteFailure({ error })),
-            ),
+              of(MoviesActions.toggleMovieToFavoriteFailure({ error }))
+            )
           );
-      }),
-    ),
+      })
+    )
   );
 
   loadWatchLater$ = createEffect(() =>
@@ -121,11 +121,11 @@ export class MoviesEffects {
             return MoviesActions.loadWatchLaterSuccess({ movies: watchLater });
           }),
           catchError((error) =>
-            of(MoviesActions.loadWatchLaterFailure({ error })),
-          ),
+            of(MoviesActions.loadWatchLaterFailure({ error }))
+          )
         );
-      }),
-    ),
+      })
+    )
   );
 
   toggleMovieToWatchLater$ = createEffect(() =>
@@ -143,11 +143,11 @@ export class MoviesEffects {
               MoviesActions.loadWatchLater(),
             ]),
             catchError((error) =>
-              of(MoviesActions.toggleMovieToWatchLaterFailure({ error })),
-            ),
+              of(MoviesActions.toggleMovieToWatchLaterFailure({ error }))
+            )
           );
-      }),
-    ),
+      })
+    )
   );
 
   // News Subscription
@@ -159,8 +159,8 @@ export class MoviesEffects {
         return MoviesActions.getSubscriberSuccess({
           subscriber: subscriberData,
         });
-      }),
-    ),
+      })
+    )
   );
 
   addSubscription$ = createEffect(
@@ -169,11 +169,11 @@ export class MoviesEffects {
         ofType(MoviesActions.setSubscriberToLocalStorage),
         tap((action) =>
           this.newsSubscriptionService.addSubscriptionToLocalSotrage(
-            action.subscriber,
-          ),
-        ),
+            action.subscriber
+          )
+        )
       ),
-    { dispatch: false },
+    { dispatch: false }
   );
 
   removeSubscription$ = createEffect(
@@ -181,10 +181,10 @@ export class MoviesEffects {
       this.actions$.pipe(
         ofType(MoviesActions.removeSubsciption),
         tap(() =>
-          this.newsSubscriptionService.removeSubsciptionFromLocalStorage(),
-        ),
+          this.newsSubscriptionService.removeSubsciptionFromLocalStorage()
+        )
       ),
-    { dispatch: false },
+    { dispatch: false }
   );
 
   // Login
@@ -194,8 +194,8 @@ export class MoviesEffects {
       map(() => {
         const userData = this.authService.getUserData();
         return MoviesActions.getUserDataSuccess({ userData });
-      }),
-    ),
+      })
+    )
   );
 
   addUserData$ = createEffect(
@@ -203,10 +203,10 @@ export class MoviesEffects {
       this.actions$.pipe(
         ofType(MoviesActions.setUserDataToLocalStorage),
         tap((action) =>
-          this.authService.addUserDataToLocalStorage(action.userData),
-        ),
+          this.authService.addUserDataToLocalStorage(action.userData)
+        )
       ),
-    { dispatch: false },
+    { dispatch: false }
   );
 
   authenticateUser$ = createEffect(() =>
@@ -217,23 +217,23 @@ export class MoviesEffects {
           .authenticateAndGetAccountId(action.username, action.password)
           .pipe(
             map((accountId) =>
-              MoviesActions.authenticateUserSuccess({ accountId }),
+              MoviesActions.authenticateUserSuccess({ accountId })
             ),
             catchError((error) =>
-              of(MoviesActions.authenticateUserFailure({ error })),
-            ),
-          ),
-      ),
-    ),
+              of(MoviesActions.authenticateUserFailure({ error }))
+            )
+          )
+      )
+    )
   );
 
   removeUser$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(MoviesActions.removeUser),
-        tap(() => this.authService.removeUserFromLocalStorage()),
+        tap(() => this.authService.removeUserFromLocalStorage())
       ),
-    { dispatch: false },
+    { dispatch: false }
   );
 
   // Genres
@@ -246,9 +246,9 @@ export class MoviesEffects {
             const genres = result.genres;
             return MoviesActions.loadGenresSuccess({ genres });
           }),
-          catchError((error) => of(MoviesActions.loadGenresFailure({ error }))),
+          catchError((error) => of(MoviesActions.loadGenresFailure({ error })))
         );
-      }),
-    ),
+      })
+    )
   );
 }

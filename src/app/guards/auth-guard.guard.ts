@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
     else {
       const ref: DynamicDialogRef = this.dialogService.open(
         LoginPopupComponent,
-        { header: 'Log In With TMDB Account', width: '25rem' },
+        { header: 'Log In With TMDB Account', width: '25rem' }
       );
 
       return false;

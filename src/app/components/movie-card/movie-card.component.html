@@ -1,7 +1,16 @@
 <p-card styleClass="movie">
+  @if (movie) {
   <ng-template pTemplate="header">
-    <p-button [icon]="watchLaterIcon" [rounded]="true" [outlined]="true" (click)="toggleMovieToWatchLater(movie.id)"></p-button>
-    <p-button [icon]="favoritesIcon" [rounded]="true" [outlined]="true" (click)="toggleMovieToFavorite(movie.id)"></p-button>
+    @if (isWatchLater) {
+    <p-button icon="pi pi-bookmark-fill" [rounded]="true" [outlined]="true" (click)="toggleMovieToWatchLater(movie.id)"></p-button>
+    } @else {
+    <p-button icon="pi pi-bookmark" [rounded]="true" [outlined]="true" (click)="toggleMovieToWatchLater(movie.id)"></p-button>
+    }
+    @if (isFavorite) {
+    <p-button icon="pi pi-heart-fill" [rounded]="true" [outlined]="true" (click)="toggleMovieToFavorite(movie.id)"></p-button>
+    } @else {
+    <p-button icon="pi pi-heart" [rounded]="true" [outlined]="true" (click)="toggleMovieToFavorite(movie.id)"></p-button>
+    }
   </ng-template>
   <div class="movie__content">
     <h3 class="movie__title" [pTooltip]="movie.title" tooltipPosition="top" showDelay="700" hideDelay="300">
@@ -14,4 +23,5 @@
     <p class="movie__description">{{ movie.overview | truncate: 250 }}</p>
   </div>
   <img [src]="imageSrc | defaultImage:defaultImageSrc" [alt]="movie.title" class="movie__poster">
+  }
 </p-card>
